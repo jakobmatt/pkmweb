@@ -1,0 +1,434 @@
+# Translation of Feed Them Premium in German
+# This file is distributed under the same license as the Feed Them Premium package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-08-06 14:51:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Feed Them Premium\n"
+
+#: admin/facebook-event-settings-fields.php:14
+msgid "Show Event Title"
+msgstr "Zeige Veranstaltungstitel an"
+
+#: admin/facebook-event-settings-fields.php:16
+#: admin/facebook-event-settings-fields.php:25
+#: admin/facebook-group-settings-fields.php:16
+#: admin/facebook-group-settings-fields.php:25
+#: admin/facebook-loadmore-settings-fields.php:20
+#: admin/facebook-loadmore-settings-fields.php:47
+#: admin/facebook-loadmore-settings-fields.php:60
+#: admin/facebook-loadmore-settings-fields.php:114
+#: admin/facebook-loadmore-settings-fields.php:124
+#: admin/facebook-loadmore-settings-fields.php:128
+#: admin/facebook-loadmore-settings-fields.php:158
+#: admin/facebook-loadmore-settings-fields.php:180
+#: admin/facebook-page-settings-fields.php:17
+#: admin/facebook-page-settings-fields.php:26
+#: admin/instagram-settings-fields.php:26
+#: admin/instagram-settings-fields.php:54 admin/twitter-settings-fields.php:16
+#: admin/vine-settings-fields.php:7 admin/vine-settings-fields.php:17
+#: admin/youtube-settings-fields.php:84
+msgid "Yes"
+msgstr "Ja"
+
+#: admin/facebook-event-settings-fields.php:17
+#: admin/facebook-event-settings-fields.php:26
+#: admin/facebook-group-settings-fields.php:17
+#: admin/facebook-group-settings-fields.php:26
+#: admin/facebook-loadmore-settings-fields.php:19
+#: admin/facebook-loadmore-settings-fields.php:46
+#: admin/facebook-loadmore-settings-fields.php:59
+#: admin/facebook-loadmore-settings-fields.php:113
+#: admin/facebook-loadmore-settings-fields.php:124
+#: admin/facebook-loadmore-settings-fields.php:128
+#: admin/facebook-loadmore-settings-fields.php:157
+#: admin/facebook-loadmore-settings-fields.php:179
+#: admin/facebook-page-settings-fields.php:18
+#: admin/facebook-page-settings-fields.php:27
+#: admin/instagram-settings-fields.php:25
+#: admin/instagram-settings-fields.php:53 admin/twitter-settings-fields.php:15
+#: admin/vine-settings-fields.php:8 admin/vine-settings-fields.php:18
+#: admin/youtube-settings-fields.php:85
+msgid "No"
+msgstr "Nein"
+
+#: admin/facebook-event-settings-fields.php:23
+msgid "Show Event Description"
+msgstr "Zeige Veranstaltungsbeschreibung an"
+
+#: admin/facebook-event-settings-fields.php:32
+#: admin/facebook-group-settings-fields.php:32
+#: admin/facebook-page-settings-fields.php:33
+msgid "Amount of words per post"
+msgstr "Anzahl der Wörter pro Beitrag"
+
+#: admin/facebook-event-settings-fields.php:8
+#: admin/facebook-group-settings-fields.php:8
+#: admin/facebook-page-settings-fields.php:9
+msgid "# of Posts"
+msgstr "# der Beiträge"
+
+#: admin/facebook-event-settings-fields.php:9
+#: admin/facebook-event-settings-fields.php:33
+#: admin/facebook-group-settings-fields.php:9
+#: admin/facebook-group-settings-fields.php:33
+#: admin/facebook-page-settings-fields.php:10
+#: admin/facebook-page-settings-fields.php:34
+#: admin/pinterest-settings-fields.php:6 admin/pinterest-settings-fields.php:12
+msgid "is the default value"
+msgstr "ist der Standardwert"
+
+#: admin/facebook-group-settings-fields.php:14
+msgid "Show Group Title"
+msgstr "Zeige Gruppentitel an"
+
+#: admin/facebook-group-settings-fields.php:23
+msgid "Show Group Description"
+msgstr "Zeige Gruppenbeschreibung an"
+
+#: admin/facebook-loadmore-settings-fields.php:111
+msgid "Display Posts in Grid"
+msgstr "Zeige Beiträge in Gitter an"
+
+#: admin/facebook-loadmore-settings-fields.php:123
+msgid "Center Facebook Container"
+msgstr "Zentriere Facebook Container"
+
+#: admin/facebook-loadmore-settings-fields.php:127
+msgid "Image Stacking Animation On"
+msgstr "Bildstapelanimation an"
+
+#: admin/facebook-loadmore-settings-fields.php:127
+msgid "This happens when resizing browser"
+msgstr "Das passiert wenn die Größe des Browsers verändert wird"
+
+#: admin/facebook-loadmore-settings-fields.php:131
+msgid "Define the Width of each post and the Space between each post below. You must add px after any number."
+msgstr "Stelle die Breite jedes Beitrags und den Platz zwischen jedem Beitrag unten ein. Du musst hinter jede Zahl ein px hängen."
+
+#: admin/facebook-loadmore-settings-fields.php:133
+msgid "Grid Column Width"
+msgstr "Gitter Spaltenbreite"
+
+#: admin/facebook-loadmore-settings-fields.php:140
+msgid "Grid Spaces Between Posts"
+msgstr "Gitter Platz zwischen den Beiträgen"
+
+#: admin/facebook-loadmore-settings-fields.php:155
+msgid "Video Play Button"
+msgstr "Video Abspielen Button"
+
+#: admin/facebook-loadmore-settings-fields.php:155
+msgid "Displays over Video Thumbnail"
+msgstr "Wird über der Videovorschau angezeigt"
+
+#: admin/facebook-loadmore-settings-fields.php:168
+msgid "Size of the Play Button"
+msgstr "Größe des Abspielen Buttons"
+
+#: admin/facebook-loadmore-settings-fields.php:17
+msgid "Hide Like Box or Button"
+msgstr "Verstecke Like Box oder den Button"
+
+#: admin/facebook-loadmore-settings-fields.php:17
+msgid "Turn on from Facebook Options page"
+msgstr "Stelle es über die Facebook Optionen Seite an"
+
+#: admin/facebook-loadmore-settings-fields.php:177
+msgid "Show Play Button in Front"
+msgstr "Zeige Abspielen Button vorne an"
+
+#: admin/facebook-loadmore-settings-fields.php:177
+msgid "Displays before hovering over thumbnail"
+msgstr "Wird vor dem Hovern über der Vorschau angezeigt"
+
+#: admin/facebook-loadmore-settings-fields.php:193
+msgid "Align Images"
+msgstr "Bilder ausrichten"
+
+#: admin/facebook-loadmore-settings-fields.php:30
+msgid "Align Like Box or Button"
+msgstr "Füge Like Box oder Button an"
+
+#: admin/facebook-loadmore-settings-fields.php:32
+#: admin/facebook-loadmore-settings-fields.php:195
+msgid "Left"
+msgstr "Links"
+
+#: admin/facebook-loadmore-settings-fields.php:33
+#: admin/facebook-loadmore-settings-fields.php:196
+msgid "Center"
+msgstr "Mittig"
+
+#: admin/facebook-loadmore-settings-fields.php:34
+#: admin/facebook-loadmore-settings-fields.php:197
+msgid "Right"
+msgstr "Rechts"
+
+#: admin/facebook-loadmore-settings-fields.php:44
+#: admin/instagram-settings-fields.php:51 admin/twitter-settings-fields.php:13
+msgid "Display Photos in Popup"
+msgstr "Zeige Bilder in Popup an"
+
+#: admin/facebook-loadmore-settings-fields.php:57
+msgid "Load More button"
+msgstr "Mehr laden Button"
+
+#: admin/facebook-loadmore-settings-fields.php:73
+#: admin/facebook-loadmore-settings-fields.php:131
+#: admin/instagram-settings-fields.php:34
+msgid "NOTE:"
+msgstr "Notiz:"
+
+#: admin/facebook-loadmore-settings-fields.php:73
+#: admin/instagram-settings-fields.php:34
+msgid "The Button option will show a \"Load More Posts\" button under your feed. The AutoScroll option will load more posts when you reach the bottom of the feed. AutoScroll ONLY works if you've filled in a Fixed Height for your feed."
+msgstr "Der Button Option wird einen \"Lade mehr Beiträge\" Button unter deinem Feed anzeigen. Die AutoScroll Option wird mehr Beiträge laden wenn das Ende des Feeds erreicht ist. AutoScroll funktioniert NUR wenn du eine feste Höhe für deinen Feed eingetragen hast."
+
+#: admin/facebook-loadmore-settings-fields.php:75
+#: admin/instagram-settings-fields.php:36
+msgid "Load more style"
+msgstr "Lade mehr Design"
+
+#: admin/facebook-loadmore-settings-fields.php:77
+#: admin/instagram-settings-fields.php:38
+msgid "Button"
+msgstr "Button"
+
+#: admin/facebook-loadmore-settings-fields.php:78
+#: admin/instagram-settings-fields.php:39
+msgid "AutoScroll"
+msgstr "AutoScroll"
+
+#: admin/facebook-loadmore-settings-fields.php:93
+msgid "Load more Button Width"
+msgstr "Mehr laden Button Breite"
+
+#: admin/facebook-loadmore-settings-fields.php:93
+msgid "Leave blank for auto width"
+msgstr "Leer lassen für automatische Breite"
+
+#: admin/facebook-loadmore-settings-fields.php:94
+#: admin/facebook-loadmore-settings-fields.php:100
+#: admin/facebook-loadmore-settings-fields.php:134
+#: admin/facebook-loadmore-settings-fields.php:141
+#: admin/facebook-loadmore-settings-fields.php:169
+msgid "for example"
+msgstr "zum Beispiel"
+
+#: admin/facebook-loadmore-settings-fields.php:99
+msgid "Load more Button Margin"
+msgstr "Mehr laden Button Abstand"
+
+#: admin/facebook-page-settings-fields.php:15
+msgid "Show Page Title"
+msgstr "Zeige Seitentitel an"
+
+#: admin/facebook-page-settings-fields.php:24
+msgid "Show Page Description"
+msgstr "Zeige Seitenbeschreibung an"
+
+#: admin/facebook-page-settings-fields.php:33
+msgid "Type 0 to remove the posts description"
+msgstr "Gib 0 ein um die Beschreibung des Beitrags zu entfernen"
+
+#: admin/instagram-settings-fields.php:14
+msgid "# of Pics (optional)"
+msgstr "# der Bilder (optional)"
+
+#: admin/instagram-settings-fields.php:23
+msgid "Load more posts"
+msgstr "Lade mehr Beiträge"
+
+#: admin/pinterest-settings-fields.php:11
+msgid "# of Pins"
+msgstr "# der Pins"
+
+#: admin/pinterest-settings-fields.php:5
+msgid "# of Boards"
+msgstr "# der Boards (optional)"
+
+#: admin/twitter-settings-fields.php:6
+msgid "# of Tweets (optional)"
+msgstr "# der Tweets (optional)"
+
+#: admin/vine-settings-fields.php:15
+msgid "Show Vine Logo"
+msgstr "Zeige Vine Logo an"
+
+#: admin/vine-settings-fields.php:25
+msgid "Vine logo Size <br/><small>Leave blank for default size</small>"
+msgstr "Vine Logo Größe <br/><small>Leer lassen um Standardgröße zu nutzen</small>"
+
+#: admin/vine-settings-fields.php:5
+msgid "Show Title and Text"
+msgstr "Zeige Titel und Text an"
+
+#: admin/youtube-settings-fields.php:10
+msgid "Feed Type"
+msgstr "Feed Typ"
+
+#: admin/youtube-settings-fields.php:12
+msgid "User's Most Recent Videos"
+msgstr "Aktuellste Videos des Benutzers"
+
+#: admin/youtube-settings-fields.php:13
+msgid "User's Specific Playlist"
+msgstr "Eine bestimmte Playliste des Nutzers"
+
+#: admin/youtube-settings-fields.php:14
+msgid "Channel Feed"
+msgstr "Kanal Feed"
+
+#: admin/youtube-settings-fields.php:15
+msgid "Channel's Specific Playlist"
+msgstr "Eine bestimmte Playliste des Kanals"
+
+#: admin/youtube-settings-fields.php:22
+msgid "Youtube Username (required)"
+msgstr "Youtube Benutzername (benötigt)"
+
+#: admin/youtube-settings-fields.php:30 admin/youtube-settings-fields.php:45
+msgid "Youtube Playlist ID (required)"
+msgstr "Youtube Playlist ID (benötigt)"
+
+#: admin/youtube-settings-fields.php:37
+msgid "Youtube Username<br/><small>Required if showing <a href=\"admin.php?page=fts-youtube-feed-styles-submenu-page\">Subscribe button</a></small>"
+msgstr "Youtube Benutzername<br/><small>Benötigt wenn <a href=\"admin.php?page=fts-youtube-feed-styles-submenu-page\">Abonnieren Button angezeigt wird</a></small>"
+
+#: admin/youtube-settings-fields.php:51
+msgid "Youtube Channel ID (required)"
+msgstr "Youtube Kanal ID (benötigt)"
+
+#: admin/youtube-settings-fields.php:58
+msgid "Youtube Channel ID<br/><small>Required if showing <a href=\"admin.php?page=fts-youtube-feed-styles-submenu-page\">Subscribe button</a></small>"
+msgstr "Youtube Kanal ID <br/><small>Benötigt wenn <a href=\"admin.php?page=fts-youtube-feed-styles-submenu-page\">Abonnieren Button angezeigt wird</a></small>"
+
+#: admin/youtube-settings-fields.php:65
+msgid "# of videos (required)"
+msgstr "# der Videos (benötigt)"
+
+#: admin/youtube-settings-fields.php:71
+msgid "# of videos in each row"
+msgstr "# der Videos in jeder Zeile"
+
+#: admin/youtube-settings-fields.php:73
+msgid "1 video per row"
+msgstr "1 Video pro Zeile"
+
+#: admin/youtube-settings-fields.php:74
+msgid "2 video per row"
+msgstr "2 Videos pro Zeile"
+
+#: admin/youtube-settings-fields.php:75
+msgid "3 video per row"
+msgstr "3 Videos pro Zeile"
+
+#: admin/youtube-settings-fields.php:76
+msgid "4 video per row"
+msgstr "4 Videos pro Zeile"
+
+#: admin/youtube-settings-fields.php:82
+msgid "Display First video full size"
+msgstr "Zeige das erste Video in voller Größe an"
+
+#: admin/youtube-settings-fields.php:91
+msgid "YouTube Feed Shortcode"
+msgstr "Youtube Feed Shortcode"
+
+#: admin/youtube-settings-fields.php:95
+msgid "Save Changes"
+msgstr "Speichere die Änderungen"
+
+#: feed-them-premium.php:102
+msgid "Leave feedback"
+msgstr "Hinterlasse Feedback"
+
+#: feed-them-premium.php:103
+msgid "Get support"
+msgstr "Hole dir Hilfe"
+
+#: feed-them-premium.php:52
+msgid "Warning: <strong>Feed Them Social Premium</strong> has been deactivated because it needs the <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (Free version) plugin to be <strong>INSTALLED</strong> and <strong>ACTIVATED</strong> to function properly."
+msgstr "Achtung:  <strong>Feed Them Social Premium</strong> wurde deaktiviert, da das <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (kostenlose Version) Plugin <strong>INSTALLIERT</strong> und <strong>AKTIVIERT</strong>sein muss um richtig zu funktionieren."
+
+#: feed-them-premium.php:60
+msgid "Warning: You will need to upgrade the FREE Version of FTS before you can activate this New Premium Version."
+msgstr "Achtung: Du wirst die kostenlose Version von FTS upgraden müssen bevor du diese neue Premium Version aktivieren kannst."
+
+#: feed-them-premium.php:68
+msgid "Warning: Your version of php must be 5.3 or greater to use this plugin. Please upgrade the php by contacting your host provider. Some host providers will allow you to change this yourself in the hosting control panel too."
+msgstr "Achtung: Deine PHP-Version muss mindestens 5.3 sein damit du dieses Plugin nutzen kannst. Bitte führe ein Upgrade von PHP aus indem du deinen Hoster kontaktierst. Einige Hostinganbieter erlauben dir diese Einstellung selbst vorzunehmen."
+
+#: feed-them-premium.php:92
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/feed-them-premium-functions.php:150
+msgid "FB Page Feed"
+msgstr "FB Seiten Feed"
+
+#: includes/feed-them-premium-functions.php:153
+msgid "The Facebook Page custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Facebook Seite Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:209
+msgid "FB Group Feed"
+msgstr "FB Gruppen Feed"
+
+#: includes/feed-them-premium-functions.php:212
+msgid "The Facebook Group custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Facebook Gruppen Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:284
+msgid "FB Event Feed"
+msgstr "FB Veranstaltungen Feed"
+
+#: includes/feed-them-premium-functions.php:287
+msgid "The Facebook Event custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Facebook Veranstaltungen Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:349
+msgid "Twitter Feed"
+msgstr "Twitter Feed"
+
+#: includes/feed-them-premium-functions.php:352
+msgid "The Twitter custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Twitter Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:419
+msgid "The Instagram custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Instagram Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:471
+msgid "Pinterest Feed"
+msgstr "Pinterest Feed"
+
+#: includes/feed-them-premium-functions.php:474
+msgid "The Pinterest custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Pinterest Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/feed-them-premium-functions.php:69
+#: includes/feed-them-premium-functions.php:147
+#: includes/feed-them-premium-functions.php:206
+#: includes/feed-them-premium-functions.php:281
+#: includes/feed-them-premium-functions.php:346
+#: includes/feed-them-premium-functions.php:468
+msgid "Feed Them Social"
+msgstr "Feed Them Social"
+
+#: includes/feed-them-premium-functions.php:72
+msgid "YouTube Feed"
+msgstr "YouTube Feed"
+
+#: includes/feed-them-premium-functions.php:75
+msgid "The YouTube custom widget has been depreciated as of premium version 1.4.7 because we have more options available on our settings page. Please use a <strong>Text</strong> widget instead and generate a shortcode from our <a href=\"admin.php?page=feed-them-settings-page\">Settings page</a>."
+msgstr "Das Youtube Custom Widget wurde in Version 1.4.7 eingestellt weil wir mehr Optionen auf der Einstellungen-Seite haben. Bitte nutze stattdessen ein <strong>Text</strong> Widget und generiere deinen Shortcode auf unserer <a href=\"admin.php?page=feed-them-settings-page\">Einstellungen-Seite</a>."
+
+#: includes/updater-check.php:45
+msgid "Warning: The <strong>Feed Them Social Premium</strong> extension has been deactivated because it needs the <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (Free version) plugin to be <strong>INSTALLED</strong> and <strong>ACTIVATED</strong> to function properly."
+msgstr "Achtung: Die <strong>Feed Them Social Premium</strong> Erweiterung wurde deaktiviert, da das <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (kostenlose Version) Plugin <strong>INSTALLIERT</strong> und <strong>AKTIVIERT</strong> sein muss, damit die Erweiterung funktioniert."

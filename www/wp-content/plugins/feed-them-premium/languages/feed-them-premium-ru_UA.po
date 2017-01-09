@@ -1,0 +1,425 @@
+# Translation of Feed Them Premium in Russian
+# This file is distributed under the same license as the Feed Them Premium package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-02-22 17:29:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Feed Them Premium\n"
+
+#: admin/facebook-event-settings-fields.php:14
+msgid "Show Event Title"
+msgstr "Показывать Название Мероприятия"
+
+#: admin/facebook-event-settings-fields.php:16
+#: admin/facebook-event-settings-fields.php:25
+#: admin/facebook-group-settings-fields.php:16
+#: admin/facebook-group-settings-fields.php:25
+#: admin/facebook-loadmore-settings-fields.php:17
+#: admin/facebook-loadmore-settings-fields.php:43
+#: admin/facebook-loadmore-settings-fields.php:56
+#: admin/facebook-loadmore-settings-fields.php:66
+#: admin/facebook-loadmore-settings-fields.php:70
+#: admin/facebook-page-settings-fields.php:17
+#: admin/facebook-page-settings-fields.php:26
+#: admin/instagram-settings-fields.php:17 admin/twitter-settings-fields.php:16
+#: admin/youtube-settings-fields.php:34
+msgid "Yes"
+msgstr "Да"
+
+#: admin/facebook-event-settings-fields.php:17
+#: admin/facebook-event-settings-fields.php:26
+#: admin/facebook-group-settings-fields.php:17
+#: admin/facebook-group-settings-fields.php:26
+#: admin/facebook-loadmore-settings-fields.php:16
+#: admin/facebook-loadmore-settings-fields.php:42
+#: admin/facebook-loadmore-settings-fields.php:55
+#: admin/facebook-loadmore-settings-fields.php:66
+#: admin/facebook-loadmore-settings-fields.php:70
+#: admin/facebook-page-settings-fields.php:18
+#: admin/facebook-page-settings-fields.php:27
+#: admin/facebook-page-settings-fields.php:33
+#: admin/instagram-settings-fields.php:16 admin/twitter-settings-fields.php:15
+#: admin/youtube-settings-fields.php:35
+msgid "No"
+msgstr "Нет"
+
+#: admin/facebook-event-settings-fields.php:23
+msgid "Show Event Description"
+msgstr "Показывать описание Мероприятия"
+
+#: admin/facebook-event-settings-fields.php:32
+#: admin/facebook-group-settings-fields.php:32
+msgid "Amount of words per post"
+msgstr "Количество слов в публикации"
+
+#: admin/facebook-event-settings-fields.php:8
+#: admin/facebook-group-settings-fields.php:8
+msgid "# of Posts"
+msgstr "Количество публикаций"
+
+#: admin/facebook-event-settings-fields.php:9
+#: admin/facebook-event-settings-fields.php:33
+#: admin/facebook-group-settings-fields.php:9
+#: admin/facebook-group-settings-fields.php:33
+#: admin/facebook-page-settings-fields.php:10
+#: admin/facebook-page-settings-fields.php:34
+#: admin/pinterest-settings-fields.php:13
+msgid "is the default value"
+msgstr "по-умолчанию"
+
+#: admin/facebook-group-settings-fields.php:14
+msgid "Show Group Title"
+msgstr "Показывать Название Группы"
+
+#: admin/facebook-group-settings-fields.php:23
+msgid "Show Group Description"
+msgstr "Показывать описание Группы"
+
+#: admin/facebook-loadmore-settings-fields.php:14
+msgid "Load more posts"
+msgstr "Подкгружать публикации"
+
+#: admin/facebook-loadmore-settings-fields.php:25
+msgid "The Button option will show a \"Load More Posts\" button under your feed. The AutoScroll option will load more posts when you reach the bottom of the feed. AutoScroll ONLY works if you've filled in a Fixed Height for your feed."
+msgstr "Опция \"Кнопка\" отборазится с текстом \"Загрузить еще\" под публикацией. Опция Автопрокрутки подгружает новые записи когда пользователь дойдет до конца публикаций. Автопрокрутка работает ТОЛЬКО если Вы указываете фиксированную высоту Вашей Ленты."
+
+#: admin/facebook-loadmore-settings-fields.php:25
+#: admin/facebook-loadmore-settings-fields.php:73
+msgid "NOTE:"
+msgstr "Внимание!:"
+
+#: admin/facebook-loadmore-settings-fields.php:27
+msgid "Load more style"
+msgstr "Оформление \"Загрузить еще\""
+
+#: admin/facebook-loadmore-settings-fields.php:29
+msgid "Button"
+msgstr "Кнопка"
+
+#: admin/facebook-loadmore-settings-fields.php:30
+msgid "AutoScroll"
+msgstr "Автопрокрутка"
+
+#: admin/facebook-loadmore-settings-fields.php:40
+#: admin/instagram-settings-fields.php:14 admin/twitter-settings-fields.php:13
+msgid "Display Photos in Popup"
+msgstr "Показывать изображения во всплывающем окне"
+
+#: admin/facebook-loadmore-settings-fields.php:53
+msgid "Display Posts in Grid"
+msgstr "Показывать публикации в виде сетки"
+
+#: admin/facebook-loadmore-settings-fields.php:65
+msgid "Center Facebook Container"
+msgstr "Центрировать контейнер Facebook"
+
+#: admin/facebook-loadmore-settings-fields.php:69
+msgid "Image Stacking Animation On"
+msgstr "Анимация появления изображений ВКЛЮЧЕНА"
+
+#: admin/facebook-loadmore-settings-fields.php:69
+msgid "This happens when resizing browser"
+msgstr "Это происходит при изменении изображения браузером"
+
+#: admin/facebook-loadmore-settings-fields.php:73
+msgid "Define the Width of each post and the Space between each post below."
+msgstr "Определите Ширину каждой публикации и Пробел между публикациями"
+
+#: admin/facebook-loadmore-settings-fields.php:75
+msgid "Grid Column Width"
+msgstr "Ширина стобца сетки"
+
+#: admin/facebook-loadmore-settings-fields.php:76
+#: admin/facebook-loadmore-settings-fields.php:83
+msgid "for example"
+msgstr "например"
+
+#: admin/facebook-loadmore-settings-fields.php:82
+msgid "Grid Spaces Between Posts"
+msgstr "Отступ между публикациями"
+
+#: admin/facebook-page-settings-fields.php:15
+msgid "Show Page Title"
+msgstr "Показывать Название Страницы"
+
+#: admin/facebook-page-settings-fields.php:24
+msgid "Show Page Description"
+msgstr "Показывать описание Страницы"
+
+#: admin/facebook-page-settings-fields.php:9
+msgid "# of Posts (optional)"
+msgstr "Количество публикаций (не обязательно)"
+
+#: admin/instagram-settings-fields.php:7
+msgid "# of Pics (optional)"
+msgstr "Количество изображений (не обязательно)"
+
+#: admin/pinterest-settings-fields.php:12
+msgid "# of Boards"
+msgstr "Количество Досок"
+
+#: admin/pinterest-settings-fields.php:19
+msgid "Pinterest Feed Shortcode"
+msgstr "Короткий Код Ленты Pinterest"
+
+#: admin/pinterest-settings-fields.php:23 admin/youtube-settings-fields.php:45
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: admin/pinterest-settings-fields.php:6
+msgid "Pinterest Username (required)"
+msgstr "Pinterest Username (обязательно)"
+
+#: admin/twitter-settings-fields.php:6
+msgid "# of Tweets (optional)"
+msgstr "Количество твитов (не обязательно)"
+
+#: admin/youtube-settings-fields.php:15
+msgid "# of videos (required)"
+msgstr "Количество видео-роликов (обязательно)"
+
+#: admin/youtube-settings-fields.php:21
+msgid "# of videos in each row"
+msgstr "Количество видео-роликов в каждой строке"
+
+#: admin/youtube-settings-fields.php:23
+#: includes/feed-them-premium-functions.php:85
+msgid "1 video per row"
+msgstr "1 видео-ролик в строке"
+
+#: admin/youtube-settings-fields.php:24
+msgid "2 video per row"
+msgstr "2 видео-ролика в строку"
+
+#: admin/youtube-settings-fields.php:25
+msgid "3 video per row"
+msgstr "3 видео-ролика в строку"
+
+#: admin/youtube-settings-fields.php:26
+msgid "4 video per row"
+msgstr "4 видео-ролика в строку"
+
+#: admin/youtube-settings-fields.php:32
+msgid "Display First video full size"
+msgstr "Показать Первое видео в полном размере"
+
+#: admin/youtube-settings-fields.php:41
+msgid "YouTube Feed Shortcode"
+msgstr "Короткий Код Ленты YouTube"
+
+#: admin/youtube-settings-fields.php:9
+#: includes/feed-them-premium-functions.php:75
+msgid "Youtube Name (required)"
+msgstr "YouTube Name (обязательно)"
+
+#: feed-them-premium.php:57
+msgid "Settings"
+msgstr "Настройки"
+
+#: feed-them-premium.php:73
+msgid "Warning: Your version of php must be 5.3 or greater to use this plugin. Please upgrade the php by contacting your host provider. Some host providers will allow you to change this yourself in the hosting control panel too."
+msgstr "Внимание: Ваша версия PHP должна быть 5,3 или выше, чтобы использовать этот плагин. Обновите PHP обратившись к Вашему провайдеру хостинга. Некоторые хостинг-провайдеры позволяют самостоятельно изменить версию в панели управления хостингом."
+
+#: feed-them-premium.php:82 includes/updater-check.php:35
+msgid "Warning: The <strong>Feed Them Social Premium</strong> extension has been deactivated because it needs the <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (Free version) plugin to be <strong>INSTALLED</strong> and <strong>ACTIVATED</strong> to function properly."
+msgstr "ВНИМАНИЕ: Плагин <strong>Feed Them Social Premium</strong> был деактивирован, потому что ему необходима <strong>УСТАНОВЛЕННАЯ и АКТИВИРОВАННЯ</strong> бесплатная версия плагина <a href=\"plugin-install.php?tab=search&s=Feed+Them+Social&plugin-search-input=Search+Plugins\"><strong>Feed Them Social</strong></a> (Free version) для работы."
+
+#: feed-them-premium.php:95
+msgid "Leave feedback"
+msgstr "Обратная связь"
+
+#: feed-them-premium.php:96
+msgid "Get support"
+msgstr "ПОДДЕРЖКА"
+
+#: includes/feed-them-premium-functions.php:167
+msgid "FB Page Feed"
+msgstr "Лента Страницы Facebook"
+
+#: includes/feed-them-premium-functions.php:174
+msgid "Facebook Page Name (required)"
+msgstr "Наименование Страницы Facebook (обязательно)"
+
+#: includes/feed-them-premium-functions.php:178
+msgid "Post Type Visible"
+msgstr "Типы публикаций в Ленту"
+
+#: includes/feed-them-premium-functions.php:180
+msgid "Display Posts made by Page only"
+msgstr "Показывать ТОЛЬКО публикации от имени Страницы"
+
+#: includes/feed-them-premium-functions.php:181
+msgid "Display Posts made by Everyone"
+msgstr "Показывать ВСЕ публикации на Странице"
+
+#: includes/feed-them-premium-functions.php:186
+#: includes/feed-them-premium-functions.php:281
+#: includes/feed-them-premium-functions.php:379
+msgid "Number of posts (required)"
+msgstr "Количество публикаций (обязательно)"
+
+#: includes/feed-them-premium-functions.php:190
+msgid "Show page title"
+msgstr "Показывать Название Страницы"
+
+#: includes/feed-them-premium-functions.php:197
+msgid "Show page description"
+msgstr "Показывать описание Страницы"
+
+#: includes/feed-them-premium-functions.php:204
+#: includes/feed-them-premium-functions.php:299
+#: includes/feed-them-premium-functions.php:397
+msgid "Number of words per post (required)"
+msgstr "Количество слов в каждой публикации (обязательно)"
+
+#: includes/feed-them-premium-functions.php:270
+msgid "FB Group Feed"
+msgstr "Лента Группы Facebook"
+
+#: includes/feed-them-premium-functions.php:277
+msgid "Facebook Group ID (required)"
+msgstr "ID Группы Facebook (обязательно)"
+
+#: includes/feed-them-premium-functions.php:285
+msgid "Show group title"
+msgstr "Показывать Название Группы"
+
+#: includes/feed-them-premium-functions.php:292
+msgid "Show group description"
+msgstr "Показывать описание Группы"
+
+#: includes/feed-them-premium-functions.php:368
+msgid "FB Event Feed"
+msgstr "Лента Мероприятия Facebook"
+
+#: includes/feed-them-premium-functions.php:375
+msgid "Facebook Event ID (required)"
+msgstr "ID Мероприятия Facebook (обязательно)"
+
+#: includes/feed-them-premium-functions.php:383
+msgid "Show event title"
+msgstr "Показывать Название Мероприятия"
+
+#: includes/feed-them-premium-functions.php:390
+msgid "Show event description"
+msgstr "Показывать описание Мероприятия"
+
+#: includes/feed-them-premium-functions.php:456
+msgid "Twitter Feed"
+msgstr "Лента Twitter"
+
+#: includes/feed-them-premium-functions.php:463
+msgid "Twitter Name (required)"
+msgstr "Twitter Name (обязательно)"
+
+#: includes/feed-them-premium-functions.php:467
+msgid "Number Tweets (required)"
+msgstr "Количество Твитов (обязательно)"
+
+#: includes/feed-them-premium-functions.php:546
+msgid "Instagram Feed"
+msgstr "Лента Instagram"
+
+#: includes/feed-them-premium-functions.php:553
+msgid "Instagram Name (required)"
+msgstr "Instagram Name (обязательно)"
+
+#: includes/feed-them-premium-functions.php:557
+msgid "Number of Photos (required)"
+msgstr "Количество изображений (обязательно)"
+
+#: includes/feed-them-premium-functions.php:562
+msgid "Click button Twice to Convert"
+msgstr "Кликните Дважды для конвертации"
+
+#: includes/feed-them-premium-functions.php:563
+msgid "Convert Instagram Username"
+msgstr "Конвертировать Имя пользователя Instagram"
+
+#: includes/feed-them-premium-functions.php:566
+msgid "Instagram ID (required)"
+msgstr "Instagram ID (обязательно)"
+
+#: includes/feed-them-premium-functions.php:623
+msgid "Pinterest Feed"
+msgstr "Лента Pinterest"
+
+#: includes/feed-them-premium-functions.php:630
+msgid "Pinterest Name (required)"
+msgstr "Pinterest Name (обязательно)"
+
+#: includes/feed-them-premium-functions.php:634
+msgid "Number Boards (required)"
+msgstr "Количество досок (обязательно)"
+
+#: includes/feed-them-premium-functions.php:67
+#: includes/feed-them-premium-functions.php:166
+#: includes/feed-them-premium-functions.php:269
+#: includes/feed-them-premium-functions.php:367
+#: includes/feed-them-premium-functions.php:455
+#: includes/feed-them-premium-functions.php:545
+#: includes/feed-them-premium-functions.php:622
+msgid "Feed Them Social"
+msgstr "Feed Them Social"
+
+#: includes/feed-them-premium-functions.php:68
+msgid "YouTube Feed"
+msgstr "Лента YouTube"
+
+#: includes/feed-them-premium-functions.php:71
+#: includes/feed-them-premium-functions.php:170
+#: includes/feed-them-premium-functions.php:273
+#: includes/feed-them-premium-functions.php:371
+#: includes/feed-them-premium-functions.php:459
+#: includes/feed-them-premium-functions.php:549
+#: includes/feed-them-premium-functions.php:626
+msgid "Your Title:"
+msgstr "Ваше Название:"
+
+#: includes/feed-them-premium-functions.php:79
+msgid "Number of Videos (required)"
+msgstr "Количество видео-роликов (обязательно)"
+
+#: includes/feed-them-premium-functions.php:83
+msgid "Number of Videos in Each Row:"
+msgstr "Количество видео-роликов в каждой строке:"
+
+#: includes/feed-them-premium-functions.php:86
+msgid "2 videos per row"
+msgstr "2 видео-ролика в строке"
+
+#: includes/feed-them-premium-functions.php:87
+msgid "3 videos per row"
+msgstr "3 видео-ролика в строке"
+
+#: includes/feed-them-premium-functions.php:88
+msgid "4 videos per row"
+msgstr "4 видео-ролика в строке"
+
+#: includes/feed-them-premium-functions.php:92
+msgid "Show First video full size:"
+msgstr "Показывать Первое видео в полном размере:"
+
+#: includes/feed-them-premium-functions.php:94
+#: includes/feed-them-premium-functions.php:192
+#: includes/feed-them-premium-functions.php:199
+#: includes/feed-them-premium-functions.php:287
+#: includes/feed-them-premium-functions.php:294
+#: includes/feed-them-premium-functions.php:385
+#: includes/feed-them-premium-functions.php:392
+msgid "yes"
+msgstr "да"
+
+#: includes/feed-them-premium-functions.php:95
+#: includes/feed-them-premium-functions.php:193
+#: includes/feed-them-premium-functions.php:200
+#: includes/feed-them-premium-functions.php:288
+#: includes/feed-them-premium-functions.php:295
+#: includes/feed-them-premium-functions.php:386
+#: includes/feed-them-premium-functions.php:393
+msgid "no"
+msgstr "нет"
