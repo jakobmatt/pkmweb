@@ -3,8 +3,8 @@ Theme Name: Vega
 Theme URI: https://www.lyrathemes.com/vega/
 Author: Lyra Themes
 Author URI: https://www.lyrathemes.com/
-Description: Vega is a simple, clean, minimal, responsive one page business WordPress theme. It can be used for a personal blog or a business website. Using Vega to create your new website will be a fast and easy experience, without getting overwhelmed with needless settings and choices. This theme can also be used to set up a single page (one page) website. It has animated content, three pre-built color choices (orange, blue, and green), text and image logo options, full screen image banner, multiple home page displays, multiple blog feed displays, and custom CSS options. The one page home page displays the banner, welcome content, featured pages, two call to action rows with an optional parallax background effect, recent posts, and an open content row. Vega has been tested with WooCommerce and has basic WooCommerce support/integration. This theme can also be used to create multilanguage websites (tested using qTranslateX). Backed by world class, one-on-one support, Vega is featured-packed yet simple enough to be used to create almost any kind of website.
-Version: 2.0.2
+Description: Vega is a clean, minimal, responsive one page business theme. This simple theme can be used for a personal blog , business website, landing page, business portfolio, or any other creative website. Using Vega to create your new website will be a fast and easy experience, without getting overwhelmed with needless settings and choices. This multipurpose theme is built on the Bootstrap framework making it fully responsive and mobile friendly. This one page theme can also be used to set up a single page (one page) website. It has animated content, three pre-built color choices (orange, blue, and green), text and image logo options, full screen image banner, multiple home page displays, multiple blog feed displays, and custom CSS options. The one page home page displays the banner, welcome content, featured pages, two call to action rows with an optional parallax background effect, recent posts, and an open content row. Vega has been tested with WooCommerce and has basic WooCommerce support/integration. This simple business theme can also be used to create multilanguage websites (tested using qTranslateX). Backed by world class, one-on-one support, Vega is featured-packed yet simple enough to be used to create almost any kind of website.
+Version: 2.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: vega
@@ -81,9 +81,9 @@ h6{ font-size:16px; }
 /* Links
 ------------------------------------------------------------------------*/
 
-a{ color:#0B0B61; }
-a:hover{ text-decoration: bold;},
-a:focus{ color:#3A01DF;}
+a{ color:#F55145; }
+a:hover,
+a:focus{ color:#DC483E;}
 button:focus,input:focus,img:focus, a:focus {outline:0;}
 a.more-link { color: #333; text-transform: uppercase;}
 
@@ -199,7 +199,7 @@ textarea.input-lg{ height:auto; }
 .top-menu{list-style:none;margin:0;padding:0;}
 .top-menu:after{content:"";display:table;clear:both}
 .top-menu>li{float:left;padding:0;margin:0}
-.top-menu>li>a{padding:6px 12px;color:#fff;display:block;font-size:14px;text-decoration:none;line-height:22px}
+.top-menu>li>a{padding:6px 12px;color:#fff;display:block;font-size:12px;text-decoration:none;line-height:22px}
 
 .top-menu>li>a:focus,
 .top-menu>li>a:hover{color:#000;text-decoration:none}
@@ -250,7 +250,7 @@ textarea.input-lg{ height:auto; }
 a.navbar-brand.text-logo { text-transform: uppercase; font-weight: 900; font-size:30px; color:#010101;}
 
 
-.navbar-custom .navbar-nav > li > a{ font-family:'Lato', sans-serif; font-size:14px; font-weight:bold; font-weight:600; padding: 25px 12px; -webkit-transition:all 0.3s ease-in-out; -moz-transition:all 0.3s ease-in-out; transition:all 0.3s ease-in-out; text-transform: uppercase; color:#010101; }
+.navbar-custom .navbar-nav > li > a{ font-family:'Lato', sans-serif; font-size:12px; font-weight:bold; font-weight:600; padding: 25px 12px; -webkit-transition:all 0.3s ease-in-out; -moz-transition:all 0.3s ease-in-out; transition:all 0.3s ease-in-out; text-transform: uppercase; color:#010101; }
 .navbar-custom .navbar-nav > li > a { line-height: 40px;}
 .navbar-custom .navbar-nav{ position:relative }
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover { color:#F55145 !important; background-color: transparent; }
@@ -282,7 +282,7 @@ a.navbar-brand.text-logo { text-transform: uppercase; font-weight: 900; font-siz
 
 .navbar-nav .dropdown-menu{ left:0; right:auto; min-width:175px !important; padding:10px 0; -webkit-border-radius:3px !important; -moz-border-radius:3px !important; border-radius:3px !important; border:0; margin-top:-2px !important; margin-left:0 !important; border-top:2px solid #F55145; }
 .navbar-nav .dropdown-menu .dropdown-menu{ left:100% !important; top:-10px !important; }
-.navbar-custom .dropdown-menu > li > a{ white-space:normal; font-size:14px; font-family:'Lato', sans-serif; padding:10px 15px; position:relative; -webkit-transition:all 0.3s ease-in-out; -moz-transition:all 0.3s ease-in-out; transition:all 0.3s ease-in-out; color:#5c5c5c; font-weight:bold;font-weight:500; letter-spacing:0.5px }
+.navbar-custom .dropdown-menu > li > a{ white-space:normal; font-size:13px; font-family:'Lato', sans-serif; padding:10px 15px; position:relative; -webkit-transition:all 0.3s ease-in-out; -moz-transition:all 0.3s ease-in-out; transition:all 0.3s ease-in-out; color:#5c5c5c; font-weight:bold;font-weight:500; letter-spacing:0.5px }
 .navbar-custom .dropdown-menu .dropdown-menu > li > a{ color:#999999; }
 .navbar-custom .dropdown-menu > li > a .fa{ position:absolute; top:8px; right:20px; line-height:20px; font-size:16px }
 .navbar-custom .dropdown-menu > li > a:hover,
@@ -291,7 +291,7 @@ a.navbar-brand.text-logo { text-transform: uppercase; font-weight: 900; font-siz
 
 .navbar-toggle{ font-size:22px; margin-bottom:8px; margin-top:24px; margin-right:5px; color:#585858; }
 
-@media (min-width:999px){
+@media (min-width:768px){
     .nav-wrapper{height:90px;}
 }
 .navbar-fixed-top .navbar-collapse{
@@ -694,7 +694,7 @@ img.aligncenter { max-width:100%; height:auto;}
 
 /* MIN WIDTH 768
 ------------------------------------------------------------------------*/
-@media (min-width:999px){
+@media (min-width:768px){
 
     .navbar-nav>li>a{ padding-top:25px; padding-bottom:25px }
 
@@ -702,16 +702,22 @@ img.aligncenter { max-width:100%; height:auto;}
 
 /* MAX WIDTH 991
 ------------------------------------------------------------------------*/
-@media (max-width:1099px){
+@media (max-width:991px){
     
     .nav-foot{ text-align:center; margin-bottom:15px; }
     .copyright{ text-align:center; margin-right:0; }
     
 }
 
+/* MIN WIDTH 992 + MAX WIDTH 1199
+------------------------------------------------------------------------*/
+@media (min-width:992px) and (max-width:1199px){
+
+}
+
 /* MIN WIDTH 768 + MAX WIDTH 991
 ------------------------------------------------------------------------*/
-@media (min-width:999px) and (max-width:1099px){
+@media (min-width:768px) and (max-width:991px){
     
     .recent-entry .recent-entry-meta .btn{ font-size:9px; line-height:18px; width:85px; }
 	.navbar-custom .navbar-nav > li > a{ padding-left:10px; padding-right:10px; }
@@ -720,7 +726,7 @@ img.aligncenter { max-width:100%; height:auto;}
 
 /* MAX WIDTH 767
 ------------------------------------------------------------------------*/
-@media (max-width:999px){
+@media (max-width:767px){
     
     h1{ font-size:30px; }
     h2{ font-size:28px; }

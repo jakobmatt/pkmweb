@@ -85,6 +85,11 @@ function vega_wp_excerpt_length( $length ) {
 }
 add_filter( 'excerpt_length', 'vega_wp_excerpt_length', 999 );
 
+//http://wordpress.stackexchange.com/questions/50779/how-to-wrap-oembed-embedded-video-in-div-tags-inside-the-content
+add_filter('embed_oembed_html', 'vega_embed_oembed_html', 99, 4);
+function vega_embed_oembed_html($html, $url, $attr, $post_id) {
+  return '<div class="iframe-video">' . $html . '</div>';
+}
 
 ### STYLES AND SCRIPTS ###
 
@@ -453,5 +458,6 @@ function vega_wp_example_sidebar(){
     the_widget( 'WP_Widget_Categories', 'title=' . __('Categories', 'vega'), 'before_title=<h3 class="widget-title">&after_title=</h3>&before_widget=<div class="widget">&after_widget=</div>');
     echo '</div>';
 }
+
 
 ?>

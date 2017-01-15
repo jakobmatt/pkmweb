@@ -29,7 +29,7 @@ $vega_wp_frontpage_latest_posts_section_id = vega_wp_get_option('vega_wp_frontpa
         <div class="row">
             <?php 
             global $post;
-            $args = array( 'numberposts' => $vega_wp_frontpage_latest_posts_n );
+            $args = array( 'numberposts' => $vega_wp_frontpage_latest_posts_n, 'suppress_filters'=>0  );
             $recent_posts = get_posts( $args ); 
             foreach( $recent_posts as $post ){
             setup_postdata( $post ); 

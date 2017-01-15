@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 2.1 =
+* New: added full page template
+* Fix: Top bar menu placement
+* New: Filter to wrap video embeds in div to make responsive
+
+
 = 2.0.2 =
 * 11/06/2016
 * Updated JS - tweak for top padding, nav height

@@ -2,8 +2,8 @@
 
 Author: LyraThemes www.lyrathemes.com
 Requires at least: WordPress 4.1
-Tested up to: WordPress 4.6
-Version: 2.0.2
+Tested up to: WordPress 4.7
+Version: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
