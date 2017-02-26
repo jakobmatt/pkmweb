@@ -3,7 +3,7 @@ Contributors: SlickRemix
 Tags:  social, social plugin, hashtags, facebook hashtags facebook, facebook plugin, facebook group, facebook page, twitter, twitter plugin, instagram, instagram plugin, youtube, youtube plugin, feed me social, feed, shortcode, slickremix, pinterest
 Requires at least: 3.6.0
 Tested up to: 4.7
-Stable tag: 1.6.6
+Stable tag: 1.6.9
 License: GPLv2 or later
 
 Easily add Instagram, Facebook Group, Facebook Page, Twitter, YouTube and now Pinterest Feeds to any page, post or widget!
@@ -22,6 +22,13 @@ Easily add Instagram, Facebook Group, Facebook Page, Twitter, YouTube and now Pi
 Extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page.
 
 == Changelog ==
+= Version 1.6.9 Wednesday, January 11th, 2017 =
+ * FIXED: Recurring updater issue. (skipped v1.6.8)
+
+= Version 1.6.7 Wednesday, January 4th, 2017 =
+ * NEW: Twitter Load More button and Autoscroll added.
+ * NEW: Twitter grid options added.
+
 = Version 1.6.6 Thursday, December 15th, 2016 =
  * Updated: Got the updater part of plugin updated and showing error/success messages now.
 

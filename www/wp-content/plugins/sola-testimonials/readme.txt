@@ -49,6 +49,8 @@ The easiest to use Testimonial plugin! Showcase your testimonials in a beautiful
 * Categorize your testimonials
 * Easy to use slider testimonial widget
 * Allow users to submit reviews (star ratings included in testimonial)
+* Export testimonials into a CSV file
+* Get notified via Slack when a new testimonial has been submitted
 * Priority [support](http://solaplugins.com/support-desk) 
 * Get the [Sola Testimonials Premium Version](http://solaplugins.com/plugins/sola-testimonials/?utm_source=wordpress&utm_medium=click&utm_campaign=readme) now
 
@@ -115,6 +117,14 @@ Testimonial submit form (Pro)
 Show all Testimonials with pagination enabled
 `[sola_t_all_testimonials per_page=2]`
 
+Display total count of all testimonials
+`[sola_testimonials_count type='any']`
+
+Display total count of all approved testimonials
+`[sola_testimonials_count type='approved']`
+
+Display total count of all pending testimonials
+`[sola_testimonials_count type='pending']`
 
 = Translations =
 Get a free copy of the Sola Testimonials Premium version in exchange for translating our plugin!
@@ -185,6 +195,11 @@ Showing your testimonials within a widget is easy. Simply copy and paste the sho
 Not applicable.
 
 == Changelog ==
+
+= 1.9.3 - 2017-01-27 - Low Priority =
+* New Shortcode Added - Ability to display the total count of your markers 
+* [sola_testimonials_count type='any'] - type accepts 'any', 'pending', 'approved'
+* Fixed a bug that caused the testimonial status to remain approved
 
 = 1.9.2 - 2016-12-06 - Medium Priority =
 * PHP errors fixed upon activation

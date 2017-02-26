@@ -137,9 +137,9 @@ class FTS_Facebook_Feed extends feed_them_social_functions {
 
             $feed_data_check = json_decode($response2['feed_data']);
 
-          //    echo '<pre>';
-          //    print_r($feed_data_check);
-          //    echo '</pre>';
+            //  echo '<pre>';
+            //  print_r($feed_data_check);
+            //  echo '</pre>';
 
             //  $idNew = array();
             //  $idNew = explode(',', $FB_Shortcode['id']);
@@ -245,9 +245,13 @@ class FTS_Facebook_Feed extends feed_them_social_functions {
         $page_data = json_decode($response['page_data']);
         //   $feed_data = json_decode($response['feed_data']);
         $feed_data = json_decode($response['feed_data']);
+        $fts_facebook_custom_api_token_biz = get_option('fts_facebook_custom_api_token_biz');
+        if (is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') && $fts_facebook_custom_api_token_biz && $FB_Shortcode['type'] == 'reviews') {
+            $ratings_data = json_decode($response['ratings_data']);
+        }
 
         //  echo '<pre>';
-        //  print_r($page_data );
+        //  print_r($ratings_data);
         //  echo '</pre>';
 
         if (is_plugin_active('feed-them-social-combined-streams/feed-them-social-combined-streams.php')) {
@@ -346,20 +350,40 @@ class FTS_Facebook_Feed extends feed_them_social_functions {
             $FTS_FB_OUTPUT .= isset($FB_Shortcode['grid']) && $FB_Shortcode['grid'] !== 'yes' && $FB_Shortcode['type'] !== 'album_photos' && $FB_Shortcode['type'] !== 'albums' ? '<div class="fts-fb-header-wrapper">' : '';
             //Header
             $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-header">';
-            if (is_plugin_active('feed-them-premium/feed-them-premium.php')) {
 
-                // $FTS_FB_OUTPUT .= our Facebook Page Title or About Text. Commented out the group description because in the future we will be adding the about description.
+            if (is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') && isset($FB_Shortcode['overall_rating']) && $FB_Shortcode['overall_rating'] == 'yes') {
 
-                $fts_align_title = isset($FB_Shortcode['title_align']) && $FB_Shortcode['title_align'] !== '' ? 'style="text-align:' . $FB_Shortcode['title_align'] . ';"' : '';
-                $FTS_FB_OUTPUT .= isset($FB_Shortcode['title']) && $FB_Shortcode['title'] !== 'no' ? '<h1 ' . $fts_align_title . '><a href="' . $fts_view_fb_link . '" target="_blank">' . $page_data->name . '</a></h1>' : '';
-                //Description
-                $FTS_FB_OUTPUT .= isset($FB_Shortcode['description']) && $FB_Shortcode['description'] !== 'no' ? '<div class="fts-jal-fb-group-header-desc">' . $this->fts_facebook_tag_filter($page_data->description) . '</div>' : '';
+               // $FTS_FB_OUTPUT .= $this->get_facebook_overall_rating_response($FB_Shortcode, $fb_cache_name, $access_token);
 
-            } else {
-                // $FTS_FB_OUTPUT .= our Facebook Page Title or About Text. Commented out the group description because in the future we will be adding the about description.
-                $FTS_FB_OUTPUT .= '<h1><a href="' . $fts_view_fb_link . '" target="_blank">' . $page_data->name . '</a></h1>';
-                //Description
-                $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-group-header-desc">' . $this->fts_facebook_tag_filter($page_data->description) . '</div>';
+                $fb_reviews_overall_rating_of_5_stars_text = get_option('fb_reviews_overall_rating_of_5_stars_text');
+                $fb_reviews_overall_rating_of_5_stars_text = !empty($fb_reviews_overall_rating_of_5_stars_text) ? ' ' . $fb_reviews_overall_rating_of_5_stars_text : ' of 5 stars';
+                $fb_reviews_overall_rating_reviews_text = get_option('fb_reviews_overall_rating_reviews_text');
+                $fb_reviews_overall_rating_reviews_text = !empty($fb_reviews_overall_rating_reviews_text) ? ' ' . $fb_reviews_overall_rating_reviews_text : ' reviews';
+                $fb_reviews_overall_rating_background_border_hide = get_option('fb_reviews_overall_rating_background_border_hide');
+                $fb_reviews_overall_rating_background_border_hide = !empty($fb_reviews_overall_rating_background_border_hide) && $fb_reviews_overall_rating_background_border_hide == 'yes' ? ' fts-review-details-master-wrap-no-background-or-border' : '';
+
+                $FTS_FB_OUTPUT .= '<div class="fts-review-details-master-wrap' . $fb_reviews_overall_rating_background_border_hide . '"><i class="fts-review-star">' . $ratings_data->overall_star_rating . ' &#9733;</i>';
+                $FTS_FB_OUTPUT .= '<div class="fts-review-details-wrap" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"><div class="fts-review-details"><span itemprop="ratingValue">' . $ratings_data->overall_star_rating . '</span>' . $fb_reviews_overall_rating_of_5_stars_text . '</div>';
+                $FTS_FB_OUTPUT .= '<div class="fts-review-details-count"><span itemprop="reviewCount">' . $ratings_data->rating_count . '</span>' . $fb_reviews_overall_rating_reviews_text . '</div></div></div>';
+
+
+            }
+            if($FB_Shortcode['type'] !== 'reviews') {
+                if (is_plugin_active('feed-them-premium/feed-them-premium.php')) {
+
+                    // $FTS_FB_OUTPUT .= our Facebook Page Title or About Text. Commented out the group description because in the future we will be adding the about description.
+
+                    $fts_align_title = isset($FB_Shortcode['title_align']) && $FB_Shortcode['title_align'] !== '' ? 'style="text-align:' . $FB_Shortcode['title_align'] . ';"' : '';
+                    $FTS_FB_OUTPUT .= isset($FB_Shortcode['title']) && $FB_Shortcode['title'] !== 'no' ? '<h1 ' . $fts_align_title . '><a href="' . $fts_view_fb_link . '" target="_blank">' . $page_data->name . '</a></h1>' : '';
+                    //Description
+                    $FTS_FB_OUTPUT .= isset($FB_Shortcode['description']) && $FB_Shortcode['description'] !== 'no' ? '<div class="fts-jal-fb-group-header-desc">' . $this->fts_facebook_tag_filter($page_data->description) . '</div>' : '';
+
+                } else {
+                    // $FTS_FB_OUTPUT .= our Facebook Page Title or About Text. Commented out the group description because in the future we will be adding the about description.
+                    $FTS_FB_OUTPUT .= '<h1><a href="' . $fts_view_fb_link . '" target="_blank">' . $page_data->name . '</a></h1>';
+                    //Description
+                    $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-group-header-desc">' . $this->fts_facebook_tag_filter($page_data->description) . '</div>';
+                }
             }
             //END Header
             $FTS_FB_OUTPUT .= '</div>';
@@ -623,21 +647,15 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
             $FTS_FB_OUTPUT .= '<div class="clear"></div><div id="fb-root"></div>';
             if (is_plugin_active('feed-them-premium/feed-them-premium.php') && $FB_Shortcode['type'] !== 'reviews' || is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') && $FB_Shortcode['type'] == 'reviews') {
                 if ($FB_Shortcode['loadmore'] == 'button') {
-                    // fts-fb-header-wrapper
-                    if ($FB_Shortcode['grid'] !== 'yes') {
-                        $FTS_FB_OUTPUT .= '<div class="fts-fb-load-more-wrapper">';
-                    }
 
-
-                    $FTS_FB_OUTPUT .= '<div id="loadMore_' . $_REQUEST['fts_dynamic_name'] . '" style="';
-                    if (isset($FB_Shortcode['loadmore_btn_maxwidth']) && $FB_Shortcode['loadmore_btn_maxwidth'] !== '') {
-                        $FTS_FB_OUTPUT .= 'max-width:' . $FB_Shortcode['loadmore_btn_maxwidth'] . ';';
-                    }
-                    $loadmore_btn_margin = isset($FB_Shortcode['loadmore_btn_margin']) ? $FB_Shortcode['loadmore_btn_margin'] : '20px';
-                    $FTS_FB_OUTPUT .= 'margin:' . $loadmore_btn_margin . ' auto ' . $loadmore_btn_margin . '" class="fts-fb-load-more">' . __('Load More', 'feed-them-social') . '</div>';
-                    if ($FB_Shortcode['grid'] !== 'yes') {
-                        $FTS_FB_OUTPUT .= '</div>';
-                    }
+                    $FTS_FB_OUTPUT .= '<div class="fts-fb-load-more-wrapper">';
+                        $FTS_FB_OUTPUT .= '<div id="loadMore_' . $_REQUEST['fts_dynamic_name'] . '" style="';
+                        if (isset($FB_Shortcode['loadmore_btn_maxwidth']) && $FB_Shortcode['loadmore_btn_maxwidth'] !== '') {
+                            $FTS_FB_OUTPUT .= 'max-width:' . $FB_Shortcode['loadmore_btn_maxwidth'] . ';';
+                        }
+                        $loadmore_btn_margin = isset($FB_Shortcode['loadmore_btn_margin']) ? $FB_Shortcode['loadmore_btn_margin'] : '20px';
+                        $FTS_FB_OUTPUT .= 'margin:' . $loadmore_btn_margin . ' auto ' . $loadmore_btn_margin . '" class="fts-fb-load-more">' . __('Load More', 'feed-them-social') . '</div>';
+                    $FTS_FB_OUTPUT .= '</div>';
                 }
             }
         }//End Check
@@ -1101,7 +1119,6 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
                 return $output;
             default:
 
-
                 if ($FB_Shortcode['type'] == 'reviews' && is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php')) {
                     $output = '';
                     $fb_reviews_see_more_reviews_language = get_option('fb_reviews_see_more_reviews_language') ? get_option('fb_reviews_see_more_reviews_language') : 'See More Reviews';
@@ -1113,8 +1130,9 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
                     $output = '<div class="fts-likes-shares-etc-wrap"><a href="https://facebook.com/' . $FBpost_user_id . '/posts/' . $FBpost_single_id . '" target="_blank" class="fts-jal-fb-see-more">';
                     $output .= '' . $lcs_array['likes'] . ' ' . $lcs_array['comments'] . ' &nbsp;&nbsp;&nbsp;' . __('View on Facebook', 'feed-them-social') . '</a></div>';
                 }
-
-                return $output;
+                if(get_option('fb_reviews_remove_see_reviews_link') !== 'yes' ){
+                    return $output;
+                }
         }
     }
 
@@ -1235,6 +1253,46 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
     }
 
     /**
+     * Get Facebook Overall Rating Response
+     *
+     * @param $FB_Shortcode
+     * @param $fb_cache_name
+     * @param $access_token
+     * @param $language
+     * @return array|mixed
+     * @since 2.1.3
+     */
+    function get_facebook_overall_rating_response($FB_Shortcode, $fb_cache_name, $access_token) {
+
+
+     //   $mulit_data_rating = $this->fts_get_feed_json($mulit_data_rating);
+
+        //Error Check
+     //   $feed_data_rating_overall = json_decode($mulit_data['rating_data']);
+
+        $fb_reviews_overall_rating_of_5_stars_text = get_option('fb_reviews_overall_rating_of_5_stars_text');
+        $fb_reviews_overall_rating_of_5_stars_text = !empty($fb_reviews_overall_rating_of_5_stars_text) ? ' ' . $fb_reviews_overall_rating_of_5_stars_text : ' of 5 stars';
+        $fb_reviews_overall_rating_reviews_text = get_option('fb_reviews_overall_rating_reviews_text');
+        $fb_reviews_overall_rating_reviews_text = !empty($fb_reviews_overall_rating_reviews_text) ? ' ' . $fb_reviews_overall_rating_reviews_text : ' reviews';
+        $fb_reviews_overall_rating_background_border_hide = get_option('fb_reviews_overall_rating_background_border_hide');
+        $fb_reviews_overall_rating_background_border_hide = !empty($fb_reviews_overall_rating_background_border_hide) && $fb_reviews_overall_rating_background_border_hide == 'yes' ? ' fts-review-details-master-wrap-no-background-or-border' : '';
+
+        $FTS_FB_OUTPUT = '<div class="fts-review-details-master-wrap' . $fb_reviews_overall_rating_background_border_hide . '"><i class="fts-review-star">' . $feed_data_rating_overall->overall_star_rating . ' &#9733;</i>';
+        $FTS_FB_OUTPUT .= '<div class="fts-review-details-wrap" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"><div class="fts-review-details"><span itemprop="ratingValue">' . $feed_data_rating_overall->overall_star_rating . '</span>' . $fb_reviews_overall_rating_of_5_stars_text . '</div>';
+        $FTS_FB_OUTPUT .= '<div class="fts-review-details-count"><span itemprop="reviewCount">' . $feed_data_rating_overall->rating_count . '</span>' . $fb_reviews_overall_rating_reviews_text . '</div></div></div>';
+
+       // $fb_cache_name = $FB_Shortcode['id'] . $this->rand_string(10);
+
+        //Make sure it's not ajaxing
+       // if (!isset($_GET['load_more_ajaxing'])) {
+            //Create Cache
+       //     $FTS_FB_OUTPUT = $this->fts_create_feed_cache($fb_cache_name, $feed_data_rating_overall);
+       // }
+        return $FTS_FB_OUTPUT;
+    }
+
+
+    /**
      * Get Facebook Feed Response
      *
      * @param $FB_Shortcode
@@ -1341,6 +1399,9 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
                 if (is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php')) {
                     $FTS_Facebook_Reviews = new FTS_Facebook_Reviews();
                     $mulit_data = $FTS_Facebook_Reviews->review_connection($FB_Shortcode, $access_token, $language);
+
+                    $mulit_data['ratings_data'] = 'https://graph.facebook.com/' . $FB_Shortcode['id'] . '/?fields=overall_star_rating,rating_count&access_token=' . $access_token . '';
+
                 } else {
                     return 'Please Purchase and Activate the Feed Them Social Reviews plugin.';
                     exit;
@@ -1356,6 +1417,8 @@ style="margin:' . (isset($FB_Shortcode['slider_margin']) && $FB_Shortcode['slide
                 }
             }
             $response = $this->fts_get_feed_json($mulit_data);
+
+
 
             //Error Check
             $feed_data = json_decode($response['feed_data']);

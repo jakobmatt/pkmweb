@@ -91,6 +91,26 @@
             </td>
         </tr>
     <?php } ?>
+    <?php if(function_exists('sola_t_pro_activate')){ ?>
+        <tr>
+            <th><label for=""><?php _e('Export Testimonials', 'sola_t'); ?></label></th>
+            <td>        
+                <a href='<?php echo admin_url( 'edit.php?post_type=testimonials&page=sola_t_settings&tab=options&export=all'); ?>' class='button button-primary'><?php _e( 'Export All', 'sola_t' ); ?></a>
+            </td>
+        </tr>
+    <?php 
+    
+        } else { 
+            $pro_link = "<a href=\"http://solaplugins.com/plugins/sola-testimonials/?utm_source=plugin&utm_medium=link&utm_campaign=export_options_page\" target=\"_BLANK\">".__('Premium Version', 'sola_t')."</a>";
+    ?>
+        <tr>
+            <th><label for=""><?php _e('Export Testimonials', 'sola_t'); ?></label></th>
+            <td>        
+                <a href='#' class='button button-primary' disabled='disbaled' title='<?php _e('Premium Version Only', 'sola_t'); ?>'><?php _e( 'Export All', 'sola_t' ); ?></a>
+                <p class="description"><?php _e("Exporting markers is only available in the $pro_link", "sola_t"); ?></p>
+            </td>
+        </tr>
+    <?php } ?>
     <tr>
         <td colspan="2">
             <hr/>

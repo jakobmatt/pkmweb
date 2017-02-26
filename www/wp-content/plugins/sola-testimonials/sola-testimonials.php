@@ -3,13 +3,18 @@
  * Plugin Name: Sola Testimonials
  * Plugin URI: http://solaplugins.com
  * Description: A super easy to use and comprehensive Testimonial plugin.
- * Version: 1.9.2
+ * Version: 1.9.3
  * Author: Sola Plugins
  * Author URI: http://solaplugins.com
  * License: GPL2
  */
 
 /* 
+ * 1.9.3 - 2017-01-27 - Low Priority
+ * New Shortcode Added - Ability to display the total count of your markers
+ * [sola_testimonials_count type='any'] - type accepts 'any', 'pending', 'approved'
+ * Fixed a bug that caused the testimonial status to remain approved
+ * 
  * 1.9.2 - 2016-12-06 - Medium Priority
  * PHP errors fixed upon activation
  * Tested on WordPress 4.7
@@ -128,8 +133,8 @@ require_once 'includes/widget.php';
 
 add_action( 'widgets_init', 'sola_t_register_widgets' );
 
+add_filter('pre_get_posts', 'sola_t_loop_control', 10);    
 
-add_filter('pre_get_posts', 'sola_t_loop_control');
 add_filter('manage_testimonials_posts_columns' , 'sola_t_columns');
 add_filter('excerpt_more', 'sola_t_read_more',999);
 //add_filter('excerpt_length', 'sola_t_excerpt_length');
@@ -141,7 +146,7 @@ register_uninstall_hook(__FILE__, 'sola_t_uninstall');
 global $sola_t_version;
 global $sola_t_version_string;
 
-$sola_t_version = "1.9.1";
+$sola_t_version = "1.9.3";
 $sola_t_version_string = "Basic";
 
 function sola_t_register_widgets(){
@@ -641,7 +646,10 @@ function sola_t_save_testimonial_meta($post_id) {
         update_post_meta( $post_id, 'sola_t_rating', sanitize_text_field( $_REQUEST['sola_t_rating'] ) );
     }
     
-    update_post_meta ($post_id, '_sola_t_status', 1);
+    if( isset( $_REQUEST['sola_t_submit_status'] ) ){
+        update_post_meta ($post_id, '_sola_t_status', sanitize_text_field( $_REQUEST['sola_t_submit_status'] ) );
+    }
+    
 }
 
 function sola_t_side_meta_box() {
@@ -843,8 +851,9 @@ if (isset($_POST['sola_t_save_options'])){
 }
 
 function sola_t_loop_control( $query ) {
+
     if (!is_single() && !is_admin()) { 
-        if (isset($query->query['post_type']) && $query->query['post_type'] == "testimonials") {
+        if (isset($query->query['post_type']) && $query->query['post_type'] == "testimonials") {            
             $query->set( 'meta_query', array(
                     array(
                           'key' => '_sola_t_status',
@@ -903,3 +912,66 @@ function sola_t_is_secure() {
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
 }
 
+add_shortcode( 'sola_testimonials_count', 'sola_t_return_testimonial_count' );
+
+function sola_t_return_testimonial_count( $atts ){    
+
+    remove_filter( 'pre_get_posts', 'sola_t_loop_control', 10 );
+
+    if( isset( $atts['type'] ) ){
+        
+        if( $atts['type'] == 'all' ){
+            $args = array(
+                'post_type' => 'testimonials',            
+                'meta_query' => array(
+                    array(
+                        'key'     => '_sola_t_status',
+                        'value'   => null,
+                        'compare' => '!=',
+                    ),
+                )            
+            );
+        } else if( $atts['type'] == 'approved' ){
+            $args = array(
+                'post_type' => 'testimonials',            
+                'meta_query' => array(
+                    array(
+                        'key'     => '_sola_t_status',
+                        'value'   => 1,
+                        'compare' => '==',
+                    ),
+                )            
+            );
+        } else if( $atts['type'] == 'pending' ){
+            $args = array(
+                'post_type' => 'testimonials',            
+                'meta_query' => array(
+                    array(
+                        'key'     => '_sola_t_status',
+                        'value'   => 0,
+                        'compare' => '==',
+                    ),
+                )            
+            );
+        } else {
+            $args = array(
+                'post_type' => 'testimonials',            
+                'meta_query' => array(
+                    array(
+                        'key'     => '_sola_t_status',
+                        'value'   => null,
+                        'compare' => '!=',
+                    ),
+                )            
+            );
+        }
+
+        $my_query = new WP_Query( $args );               
+
+        $post_count = $my_query->found_posts;
+
+        return number_format( $post_count );
+
+    }
+
+}

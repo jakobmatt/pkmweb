@@ -19,19 +19,19 @@ class FTS_Instagram_Feed extends feed_them_social_functions
         add_action('wp_enqueue_scripts', array($this, 'fts_instagram_head'));
     }
 
-    function convert_twitter_description_links($bio) {
+    function convert_instagram_description_links($bio) {
         //Create links from @mentions and regular links.
         $bio = preg_replace('/((http)+(s)?:\/\/[^<>\s]+)/i', '<a href="$0" target="_blank">$0</a>', $bio );
-        $bio = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/search?q=%23$1" target="_blank">$0</a>', $bio );
-        $bio = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/$1" target="_blank">@$1</a>', $bio );
+        $bio = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank">$0</a>', $bio );
+        $bio = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="https://www.instagram.com/$1" target="_blank">@$1</a>', $bio );
         return $bio;
     }
 
-    function convert_twitter_links($instagram_caption_a_title) {
+    function convert_instagram_links($instagram_caption_a_title) {
         //Create links from @mentions and regular links.
         $instagram_caption_a_title = preg_replace('/((http)+(s)?:\/\/[^<>\s]+)/i', '<a href="$0" target="_blank">$0</a>', $instagram_caption_a_title );
-        $instagram_caption = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/search?q=%23$1" target="_blank">$0</a>', $instagram_caption_a_title );
-        $instagram_caption = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/$1" target="_blank">@$1</a>', $instagram_caption );
+        $instagram_caption = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="https://www.instagram.com/explore/tags/$1" target="_blank">$0</a>', $instagram_caption_a_title );
+        $instagram_caption = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="https://www.instagram.com/$1" target="_blank">@$1</a>', $instagram_caption );
         return $instagram_caption;
     }
 
@@ -97,7 +97,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions
     function fts_instagram_description($post_data) {
         $instagram_caption_a_title = isset($post_data->caption->text) ? $post_data->caption->text : "";
         $instagram_caption_a_title = htmlspecialchars($instagram_caption_a_title);
-        $instagram_caption = $this->convert_twitter_links($instagram_caption_a_title);
+        $instagram_caption = $this->convert_instagram_links($instagram_caption_a_title);
         return  $instagram_caption;
     }
 
@@ -328,7 +328,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions
 
                             if (isset($profile_description) && $profile_description == "yes") { ?>
 
-                            <div class="fts-profile-description"><?php print $this->convert_twitter_description_links($bio); ?> <a href="<?php print $website ?>"><?php print $website ?></a></div>
+                            <div class="fts-profile-description"><?php print $this->convert_instagram_description_links($bio); ?> <a href="<?php print $website ?>"><?php print $website ?></a></div>
 
                             <?php } ?>
 
@@ -408,7 +408,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions
 
             $instagram_caption_a_title = isset($post_data->caption->text) ? $post_data->caption->text : "";
             $instagram_caption_a_title = htmlspecialchars($instagram_caption_a_title);
-            $instagram_caption = $this->convert_twitter_links($instagram_caption_a_title);
+            $instagram_caption = $this->convert_instagram_links($instagram_caption_a_title);
 
 
 
@@ -437,7 +437,9 @@ class FTS_Instagram_Feed extends feed_them_social_functions
 
                 <div class='slicker-instagram-placeholder fts-instagram-wrapper' style='background-image:url(<?php print $this->fts_instagram_image_link($post_data); ?>);width:<?php print $image_size ?>; height:<?php print $image_size ?>; margin:<?php print $space_between_photos ?>;'>
 
-              <?php    if(isset($popup) && $popup = "yes"){ ?>
+              <?php
+
+                if(is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($popup) && $popup == "yes"){ ?>
                 <div class="fts-instagram-popup-profile-wrap"><div class="fts-profile-pic"><a href="https://www.instagram.com/<?php print $username; ?>"><img src="<?php print $profile_picture; ?>" title="<?php print $username; ?>"/></a></div>
                                 <div class="fts-profile-name-wrap">
 
@@ -451,12 +453,12 @@ class FTS_Instagram_Feed extends feed_them_social_functions
                                             ?>
                                         </div>
                                 </div>
-                <?php }
+                <?php
 
-                     if (isset($popup) && $popup == 'yes') {
                          print $this->fts_instagram_popup_description($post_data);
-                     } ?>
+                     }
 
+                      ?>
                     <a href='<?php if (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($popup) && $popup == 'yes' && $post_data->type == 'image') {
                         print $this->fts_instagram_image_link($post_data);
                     }
@@ -519,13 +521,13 @@ class FTS_Instagram_Feed extends feed_them_social_functions
                     print $this->fts_instagram_popup_description($post_data); ?>
                     <?php } ?>
 
-                    <a href="<?php if (isset($popup) && $popup == 'yes' && $post_data->type == 'image') {
+                    <a href="<?php if (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($popup) && $popup == 'yes' && $post_data->type == 'image') {
                         print $this->fts_instagram_image_link($post_data);
                     }
-                    elseif ($post_data->type == 'video') {
+                    elseif (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($popup) && $popup == 'yes' && $post_data->type == 'video') {
                         print $this->fts_instagram_video_link($post_data);
                     } else {
-                        print $this->fts_instagram_image_link($post_data);
+                        print $this->fts_view_on_instagram_url($post_data);
                     } ?>" class='fts-instagram-link-target instaG-backg-link <?php if($post_data->type == 'video'){ ?>fts-instagram-video-link<?php } else{ ?>fts-instagram-img-link<?php } ?>' target='_blank' title='<?php print $instagram_caption_a_title ?>'>
                         <img src="<?php print $instagram_thumb_url ?>" class="instagram-image"/>
                         <div class='instaG-photoshadow'></div>
@@ -625,7 +627,7 @@ class FTS_Instagram_Feed extends feed_them_social_functions
             </script>
             <?php
         }//End Check
-        // main closing div not included in ajax check so we can close the wrap at all times
+       // main closing div not included in ajax check so we can close the wrap at all times
 
         print '</div>'; // closing main div for photos and scroll wrap
 
@@ -667,10 +669,10 @@ class FTS_Instagram_Feed extends feed_them_social_functions
         //Make sure it's not ajaxing
         if (!isset($_GET['load_more_ajaxing'])) {
             print '<div class="clear"></div>';
-            if (is_plugin_active('feed-them-premium/feed-them-premium.php') && $scrollMore == 'button') {
-                //  print '<div class="fts-fb-load-more-wrapper">';
-                print '<div id="loadMore_' . $fts_dynamic_name . '" class="fts-fb-load-more">' . __('Load More', 'feed-them-instagram') . '</div>';
-                //  print '</div>';
+            if (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($scrollMore) && $scrollMore == 'button') {
+                print '<div class="fts-instagram-load-more-wrapper">';
+                  print '<div id="loadMore_' . $fts_dynamic_name . '" class="fts-fb-load-more">' . __('Load More', 'feed-them-instagram') . '</div>';
+                print '</div>';
             }
         }//End Check
         unset($_REQUEST['next_url']);

@@ -6,7 +6,8 @@ namespace feedthemsocial;
  * @package feedthemsocial
  * @since 1.9.6
  */
-class feed_them_social_functions {
+class feed_them_social_functions
+{
 
     /**
      * @var string
@@ -44,14 +45,11 @@ class feed_them_social_functions {
             //	add_action( 'init', array($this, 'my_fts_fb_script_enqueuer'));
             add_action('wp_ajax_my_fts_fb_load_more', array($this, 'my_fts_fb_load_more'));
             add_action('wp_ajax_nopriv_my_fts_fb_load_more', array($this, 'my_fts_fb_load_more'));
+            add_action('wp_ajax_my_fts_fb_options_page_load_more', array($this, 'my_fts_fb_options_page_load_more'));
+
         }//END if premium
-        // This is for the Twitter videos, when you click show media
-        add_action('init', array($this, 'fts_load_videos_script'));
-        add_action('wp_ajax_fts_load_videos_ajax', array($this, 'fts_load_videos_ajax'));
-        add_action('wp_ajax_fts_load_videos', array($this, 'fts_load_videos'));
-        add_action('wp_ajax_nopriv_fts_load_videos', array($this, 'fts_load_videos'));
 
-
+        add_shortcode('fts_fb_page_token', array($this, 'fts_fb_page_token_func'));
     }
     //**************************************************
     // Add FTS options on activation. Commenting out for future use. SRL
@@ -97,6 +95,10 @@ class feed_them_social_functions {
             if (isset($_GET['page']) && $_GET['page'] == 'fts-system-info-submenu-page') {
                 add_action('admin_enqueue_scripts', array($this, 'feed_them_system_info_css'));
             }
+            //FTS License Page
+            if (isset($_GET['page']) && $_GET['page'] == 'fts-license-page') {
+                add_action('admin_footer', array($this, 'fts_plugin_license'));
+            }
         }//end if admin
         //FTS Admin Bar
         add_action('wp_before_admin_bar_render', array($this, 'fts_admin_bar_menu'), 999);
@@ -130,6 +132,333 @@ class feed_them_social_functions {
     }
 
     /**
+     * FTS FB Options Page Function
+     *
+     * Display FB Page tokens for users
+     *
+     * @param $atts
+     * @return mixed
+     * @since 2.1.4
+     */
+    function fts_fb_page_token_func() {
+
+        //Make sure it's not ajaxing
+        if (!isset($_GET['load_more_ajaxing'])) {
+            $_REQUEST['fts_dynamic_name'] = trim($this->feed_them_social_rand_string());
+        }
+
+        ob_start();
+
+        $fb_token_response = isset($_REQUEST['next_url']) ? wp_remote_fopen($_REQUEST['next_url']) : wp_remote_fopen('https://graph.facebook.com/me/accounts?access_token=' . $_GET['access_token'] . '&limit=25');
+        $test_fb_app_token_response = json_decode($fb_token_response);
+
+        //Make sure it's not ajaxing
+        if (!isset($_GET['load_more_ajaxing'])) {
+            //******************
+            //Load More BUTTON Start
+            //******************
+            ?>
+            <div class="clear"></div>
+            <div id="reviews-fb-list-wrap"></div>
+        <?php }
+
+        $build_shortcode = '[fts_fb_page_token]';
+        $_REQUEST['next_url'] = isset($test_fb_app_token_response->paging->next) ? $test_fb_app_token_response->paging->next : '';
+        //   echo'<pre>';
+        //   print_r($test_fb_app_token_response);
+        //  echo'</pre>';
+
+        //Make sure it's not ajaxing
+    if (!isset($_GET['load_more_ajaxing'])) {
+
+        $reviews_token = isset($_GET['reviews_token']) ? 'yes' : 'no';
+
+        ?>
+        <div id="fb-list-wrap">
+            <div class="fts-pages-info"> <?php _e('Click a page to add the access token above, then click save.', 'feed-them-social'); ?></div>
+            <ul class="fb-page-list">
+                <?php }
+
+                foreach ($test_fb_app_token_response->data as $data) { ?>
+                    <li>
+                        <div class="fb-image">
+                            <div class="fts-fb-id"><?php print $data->id ?></div>
+                            <img border="0" height="50" width="50" src="https://graph.facebook.com/<?php print $data->id ?>/picture"/>
+                        </div>
+                        <div class="fb-name"><?php print $data->name ?></div>
+                        <div class="page-token"><?php print $data->access_token ?></div>
+
+                        <?php
+                        $facebook_input_token = get_option('fts_facebook_custom_api_token');
+                        $facebook_access_token = $data->access_token;
+                        if ($facebook_input_token == $facebook_access_token) {
+                            ?>
+                            <div class="feed-them-social-admin-submit-btn " style="display: block !important;">Active
+                            </div>
+                        <?php } else { ?>
+                            <div class="feed-them-social-admin-submit-btn fts-token-save">Save</div>
+                        <?php } ?>
+                        <div class="clear"></div>
+                    </li>
+                <?php }
+
+                if (!isset($_GET['load_more_ajaxing'])) { ?>
+
+            </ul>
+            <div class="clear"></div>
+
+        </div>
+
+    <?php }
+        //Make sure it's not ajaxing
+        if (!isset($_GET['load_more_ajaxing']) && !isset($_REQUEST['fts_no_more_posts'])) {
+            $fts_dynamic_name = $_REQUEST['fts_dynamic_name'];
+            $time = time();
+            $nonce = wp_create_nonce($time . "load-more-nonce");
+            ?>
+            <script>
+                jQuery(document).ready(function () {
+
+                    jQuery("#loadMore_<?php echo $fts_dynamic_name ?>").click(function () {
+
+                        jQuery("#loadMore_<?php echo $fts_dynamic_name ?>").addClass('fts-fb-spinner');
+                        var button = jQuery('#loadMore_<?php echo $fts_dynamic_name ?>').html('<div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div>');
+                        console.log(button);
+                        var build_shortcode = "<?php print $build_shortcode;?>";
+                        var yes_ajax = "yes";
+                        var fts_d_name = "<?php echo $fts_dynamic_name;?>";
+                        var fts_security = "<?php echo $nonce;?>";
+                        var fts_time = "<?php echo $time;?>";
+                        var fts_reviews_feed = "<?php print $reviews_token;?>";
+                        jQuery.ajax({
+                            data: {
+                                action: "my_fts_fb_load_more",
+                                next_url: nextURL_<?php echo $fts_dynamic_name ?>,
+                                fts_dynamic_name: fts_d_name,
+                                rebuilt_shortcode: build_shortcode,
+                                load_more_ajaxing: yes_ajax,
+                                fts_security: fts_security,
+                                fts_time: fts_time,
+                                fts_reviews_feed: fts_reviews_feed,
+                            },
+                            type: 'GET',
+                            url: ajaxurl,
+                            success: function (data) {
+                                console.log('Well Done and got this from sever: ' + data);
+                                jQuery('.fb-page-list').append(data).filter('.fb-page-list').html();
+
+                                if (!nextURL_<?php echo $_REQUEST['fts_dynamic_name']; ?> || nextURL_<?php echo $_REQUEST['fts_dynamic_name']; ?> == 'no more') {
+                                    jQuery('#loadMore_<?php echo $fts_dynamic_name ?>').replaceWith('<div class="fts-fb-load-more no-more-posts-fts-fb"><?php _e('No More Pages', 'feed-them-social') ?></div>');
+                                    jQuery('#loadMore_<?php echo $fts_dynamic_name ?>').removeAttr('id');
+                                }
+                                jQuery('#loadMore_<?php echo $fts_dynamic_name ?>').html('<?php _e('Load More', 'feed-them-social') ?>');
+                                //	jQuery('#loadMore_< ?php echo $fts_dynamic_name ?>').removeClass('flip360-fts-load-more');
+                                jQuery("#loadMore_<?php echo $fts_dynamic_name ?>").removeClass('fts-fb-spinner');
+
+                            }
+                        }); // end of ajax()
+                        return false;
+
+                    }); // end of form.submit
+                }); // end of document.ready
+            </script>
+            <?php
+
+        } //END Make sure it's not ajaxing
+        ?>
+        <script>
+            var nextURL_<?php echo $_REQUEST['fts_dynamic_name']; ?>= "<?php echo $_REQUEST['next_url']; ?>";
+
+            if (document.querySelector('#fts-fb-token-wrap .fts-pages-info') !== null) {
+                jQuery(".fts-successful-api-token.default-token").hide();
+            }
+            <?php if ($reviews_token == 'yes' || isset($_GET['fts_reviews_feed']) && $_GET['fts_reviews_feed'] == 'yes'){?>
+            if (document.querySelector('.default-token') !== null) {
+                jQuery(".default-token").show();
+            }
+
+            <?php } ?>
+
+            jQuery(document).ready(function ($) {
+                $(".feed-them-social-admin-submit-btn").click(function () {
+                    // alert('test');
+                    var newUrl = "<?php echo admin_url('admin.php?page=fts-facebook-feed-styles-submenu-page/'); ?>";
+                    history.replaceState({}, null, newUrl);
+                    $("#fts-facebook-feed-options-form").submit();
+                });
+
+                <?php if ($reviews_token == 'no' || isset($_GET['fts_reviews_feed']) && $_GET['fts_reviews_feed'] == 'no'){?>
+
+                var fb = ".fb-page-list li";
+                $('#fb-list-wrap').show();
+                //alert("not set");
+                <?php } else { ?>
+                var fb = "#reviews-fb-list-wrap .fb-page-list li";
+                $('#fb-list-wrap').appendTo('#reviews-fb-list-wrap');
+                $('#fts-fb-reviews-wrap #fb-list-wrap').show();
+                $('.fts-failed-api-token.get-started-message').hide();
+                //alert("reviews_token");
+                <?php } ?>
+
+                $(fb).click(function () {
+                    var fb_page_id = $(this).find('.fts-fb-id').html();
+                    var token = $(this).find('.page-token').html();
+                    // alert(token);
+                    var name = $(this).find('.fb-name').html();
+                    <?php if ($reviews_token == 'no' || isset($_GET['fts_reviews_feed']) && $_GET['fts_reviews_feed'] == 'no'){?>
+
+                    $("#fts_facebook_custom_api_token").val(token);
+                    $("#fts_facebook_custom_api_token_user_id").val(fb_page_id);
+                    $("#fts_facebook_custom_api_token_user_name").val(name);
+                    <?php } else { ?>
+                    $("#fts_facebook_custom_api_token_biz").val(token);
+                    $("#fts_facebook_custom_api_token_user_id_biz").val(fb_page_id);
+                    $("#fts_facebook_custom_api_token_user_name_biz").val(name);
+                    <?php } ?>
+
+
+                    $('.fb-page-list .feed-them-social-admin-submit-btn').hide();
+                    $(this).find('.feed-them-social-admin-submit-btn').toggle();
+                    //   alert(name + token)
+                })
+            });
+        </script>
+
+        <?php
+        //Make sure it's not ajaxing
+        if (!isset($_GET['load_more_ajaxing']) && isset($test_fb_app_token_response->paging->next)) {
+            $fts_dynamic_name = $_REQUEST['fts_dynamic_name'];
+            // this div returns outputs our ajax request via jquery append html from above
+
+            print '<div class="clear"></div>';
+            print '<div id="output_' . $fts_dynamic_name . '"></div>';
+
+            print '<div class="clear"></div>';
+
+            //  print '<div class="fts-fb-load-more-wrapper">';
+            print '<div id="loadMore_' . $fts_dynamic_name . '" class="fts-fb-load-more">' . __('Load More', 'feed-them-instagram') . '</div>';
+            //  print '</div>';
+
+        }//End Check
+        unset($_REQUEST['next_url']);
+
+        return ob_get_clean();
+    }
+
+
+    /**
+     * My FTS Plugin License
+     *
+     * Put in place to only show the Activate Plugin license if the input has a value
+     *
+     * @since 2.1.4
+     */
+    function fts_plugin_license() {
+        wp_enqueue_script('jquery'); ?>
+        <style>.fts-license-master-form th {
+                background: #f9f9f9;
+                padding: 14px;
+                border-bottom: 1px solid #ccc;
+                margin: -14px -14px 20px;
+                width: 100%;
+                display: block
+            }
+
+            .fts-license-master-form .form-table tr {
+                float: left;
+                margin: 0 15px 15px 0;
+                background: #fff;
+                border: 1px solid #ccc;
+                width: 30.5%;
+                max-width: 350px;
+                padding: 14px;
+                min-height: 220px;
+                position: relative;
+                box-sizing: border-box
+            }
+
+            .fts-license-master-form .form-table td {
+                padding: 0;
+                display: block
+            }
+
+            .fts-license-master-form td input.regular-text {
+                margin: 0 0 8px;
+                width: 100%
+            }
+
+            .fts-license-master-form .edd-license-data[class*=edd-license-] {
+                position: absolute;
+                background: #fafafa;
+                padding: 14px;
+                border-top: 1px solid #eee;
+                margin: 20px -14px -14px;
+                min-height: 67px;
+                width: 100%;
+                bottom: 14px;
+                box-sizing: border-box
+            }
+
+            .fts-license-master-form .edd-license-data p {
+                font-size: 13px;
+                margin-top: 0
+            }
+
+            .fts-license-master-form tr {
+                display: none
+            }
+
+            .fts-license-master-form tr.fts-license-wrap {
+                display: block
+            }
+
+            .fts-license-master-form .edd-license-msg-error {
+                background: rgba(255, 0, 0, 0.49)
+            }
+
+            .fts-license-master-form tr.fts-license-wrap {
+                display: block
+            }
+
+            .fts-license-master-form .edd-license-msg-error {
+                background: #e24e4e !important;
+                color: #FFF
+            }
+
+            .fts-license-wrap .edd-license-data p {
+                color: #1e981e
+            }
+
+            .edd-license-msg-error p {
+                color: #FFF !important
+            }
+
+            .feed-them_page_fts-license-page .button-secondary {
+                display: none;
+            }</style>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                if (jQuery('#feed_them_social_premium_license_key').val() !== '') {
+                    jQuery('#feed_them_social_premium_license_key').next('label').find('.button-secondary').show()
+                }
+                if (jQuery('#feed_them_social_combined_streams_license_key').val() !== '') {
+                    jQuery('#feed_them_social_combined_streams_license_key').next('label').find('.button-secondary').show()
+                }
+                if (jQuery('#feed-them-social-facebook-reviews_license_key').val() !== '') {
+                    jQuery('#feed-them-social-facebook-reviews_license_key').next('label').find('.button-secondary').show()
+                }
+                if (jQuery('#fts_bar_license_key').val() !== '') {
+                    jQuery('#fts_bar_license_key').next('label').find('.button-secondary').show()
+                }
+                if (jQuery('#feed_them_carousel_premium_license_key').val() !== '') {
+                    jQuery('#feed_them_carousel_premium_license_key').next('label').find('.button-secondary').show()
+                }
+            });
+        </script>
+        <?php
+    }
+
+    /**
      * My FTS Ajaxurl
      *
      * Ajax var on front end for twitter videos and loadmore button (if premium active.
@@ -150,12 +479,13 @@ class feed_them_social_functions {
      * This function is being called from the fb feed... it calls the ajax in this case.
      *
      * @since 1.9.6
+     * @updated 2.1.4 (fts_fb_page_token)
      */
     function my_fts_fb_load_more() {
         if (!wp_verify_nonce($_REQUEST['fts_security'], $_REQUEST['fts_time'] . 'load-more-nonce')) {
             exit('Sorry, You can\'t do that!');
         } else {
-            if (preg_match('/^\[fts_facebook/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_facebookbiz/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_instagram/', $_REQUEST['rebuilt_shortcode'])) {
+            if (preg_match('/^\[fts_fb_page_token/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_twitter/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_facebook/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_facebookbiz/', $_REQUEST['rebuilt_shortcode']) || preg_match('/^\[fts_instagram/', $_REQUEST['rebuilt_shortcode'])) {
                 $object = do_shortcode($_REQUEST['rebuilt_shortcode']);
                 echo $object;
             } else {
@@ -192,125 +522,6 @@ class feed_them_social_functions {
             wp_enqueue_script('fts_clear_cache_script');
         }
     }
-
-    /**
-     * FTS Load Videos Script
-     *
-     * This is for the Twitter videos, when you click show media.
-     *
-     * @since 1.9.6
-     */
-    function fts_load_videos_script() {
-        $ftsFBfileJS = dirname(dirname(__FILE__)) . '/feed-them-social.php';
-        $FTS_plugin_url = plugin_dir_url($ftsFBfileJS);
-        wp_enqueue_script('jquery');
-        wp_enqueue_script('fts_load_videos_script');
-    }
-
-    /**
-     * FTS Load Videos
-     *
-     * This function is being called from the twitter feed it calls the ajax in this case.
-     *
-     * @since 1.9.6
-     */
-    function fts_load_videosssssssss() {
-        if (!wp_verify_nonce($_REQUEST['fts_security'], $_REQUEST['fts_time'] . 'load-more-nonce')) {
-            exit('Sorry, You can\'t do that!');
-        } else {
-            $tFinal = $_REQUEST['fts_link'];
-            //strip Vimeo URL then ouput Iframe
-            if (strpos($tFinal, 'vimeo') > 0) {
-                if (strpos($tFinal, 'staffpicks') > 0) {
-                    $parsed_url = $tFinal;
-                    // var_dump(parse_url($parsed_url));
-                    $parsed_url = parse_url($parsed_url);
-                    $vimeoURLfinal = preg_replace('/\D/', '', $parsed_url["path"]);
-                } else {
-                    $vimeoURLfinal = (int)substr(parse_url($tFinal, PHP_URL_PATH), 1);
-                    // echo $vimeoURLfinal;
-                }
-                // echo $vimeoURLfinal;
-                echo '<div class="fts-fluid-videoWrapper"><iframe src="http://player.vimeo.com/video/' . $vimeoURLfinal . '?autoplay=0" class="video" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
-            } //strip Vimeo Staffpics URL then ouput Iframe
-            elseif (strpos($tFinal, 'amp.twimg.com') > 0) {
-                include_once(WP_CONTENT_DIR . '/plugins/feed-them-social/feeds/twitter/twitteroauth/twitteroauth.php');
-                $fts_twitter_custom_consumer_key = get_option('fts_twitter_custom_consumer_key');
-                $fts_twitter_custom_consumer_secret = get_option('fts_twitter_custom_consumer_secret');
-                $fts_twitter_custom_access_token = get_option('fts_twitter_custom_access_token');
-                $fts_twitter_custom_access_token_secret = get_option('fts_twitter_custom_access_token_secret');
-                //Use custom api info
-                if (!empty($fts_twitter_custom_consumer_key) && !empty($fts_twitter_custom_consumer_secret) && !empty($fts_twitter_custom_access_token) && !empty($fts_twitter_custom_access_token_secret)) {
-                    $connection = new TwitterOAuthFTS(
-                    //Consumer Key
-                        $fts_twitter_custom_consumer_key,
-                        //Consumer Secret
-                        $fts_twitter_custom_consumer_secret,
-                        //Access Token
-                        $fts_twitter_custom_access_token,
-                        //Access Token Secret
-                        $fts_twitter_custom_access_token_secret
-                    );
-                } //else use default info
-                else {
-                    $connection = new TwitterOAuthFTS(
-                    //Consumer Key
-                        'dOIIcGrhWgooKquMWWXg',
-                        //Consumer Secret
-                        'qzAE4t4xXbsDyGIcJxabUz3n6fgqWlg8N02B6zM',
-                        //Access Token
-                        '1184502104-Cjef1xpCPwPobP5X8bvgOTbwblsmeGGsmkBzwdB',
-                        //Access Token Secret
-                        'd789TWA8uwwfBDjkU0iJNPDz1UenRPTeJXbmZZ4xjY'
-                    );
-                }
-                if (strpos($tFinal, 'amp.twimg.com') > 0) {
-                    $videosDecode = $_REQUEST['fts_post_id'];
-                    $fetchedTweets2 = $connection->get(
-                        'statuses/oembed',
-                        array(
-                            'id' => $videosDecode,
-                            'widget_type' => 'video',
-                            'hide_tweet' => true,
-                            'hide_thread' => true,
-                            'hide_media' => false,
-                            'omit_script' => false,
-                        )
-                    );
-                    echo $fetchedTweets2->html;
-                } else {
-                    exit('That is not allowed. FTS!');
-                }
-            } //strip Vine URL then ouput Iframe and script
-            elseif (strpos($tFinal, 'vine') > 0 && !strpos($tFinal, '-vine') > 0) {
-                // $pattern = str_replace( array( 'https://vine.co/v/', '/', 'http://vine.co/v/'), '', $tFinal);
-                // $vineURLfinal = $pattern;
-                echo '<div class="fts-fluid-videoWrapper"><iframe height="281" class="fts-vine-embed" src="' . $tFinal . '/embed/simple" frameborder="0"></iframe></div>';
-            } //strip Youtube URL then ouput Iframe and script
-            elseif (strpos($tFinal, 'youtube') > 0 && !strpos($tFinal, '-youtube') > 0) {
-                $pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
-                preg_match($pattern, $tFinal, $matches);
-                $youtubeURLfinal = $matches[1];
-                echo '<div class="fts-fluid-videoWrapper"><iframe height="281" class="video" src="http://www.youtube.com/embed/' . $youtubeURLfinal . '?autoplay=0" frameborder="0" allowfullscreen></iframe></div>';
-            } //strip Youtube URL then ouput Iframe and script
-            elseif (strpos($tFinal, 'youtu.be') > 0) {
-                $pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
-                preg_match($pattern, $tFinal, $matches);
-                $youtubeURLfinal = $matches[1];
-                echo '<div class="fts-fluid-videoWrapper"><iframe height="281" class="video" src="http://www.youtube.com/embed/' . $youtubeURLfinal . '?autoplay=0" frameborder="0" allowfullscreen></iframe></div>';
-            } //strip Youtube URL then ouput Iframe and script
-            elseif (strpos($tFinal, 'soundcloud') > 0) {
-                //Get the JSON data of song details with embed code from SoundCloud oEmbed
-                $getValues = file_get_contents('http://soundcloud.com/oembed?format=js&url=' . $tFinal . '&auto_play=false&iframe=true');
-                //Clean the Json to decode
-                $decodeiFrame = substr($getValues, 1, -2);
-                //json decode to convert it as an array
-                $jsonObj = json_decode($decodeiFrame);
-                echo '<div class="fts-fluid-videoWrapper">' . $jsonObj->html . '</div>';
-            }
-        } // end main else
-        die();
-    } // end of my_ajax_callback()
 
     /**
      * Feed Them Main Menu
@@ -362,7 +573,7 @@ class feed_them_social_functions {
             'fts-pinterest-feed-styles-submenu-page',
             array($pinterest_options_page, 'feed_them_pinterest_options_page')
         );
-        if (is_plugin_active('feed-them-premium/feed-them-premium.php') || is_plugin_active('feed-them-social-combined-streams/feed-them-social-combined-streams.php') ) {
+        if (is_plugin_active('feed-them-premium/feed-them-premium.php') || is_plugin_active('feed-them-social-combined-streams/feed-them-social-combined-streams.php')) {
             //Youtube Options Page
             $youtube_options_page = new FTS_youtube_options_page();
             add_submenu_page(
@@ -430,7 +641,7 @@ class feed_them_social_functions {
     function feed_them_settings() {
         wp_register_style('feed_them_settings_css', plugins_url('admin/css/settings-page.css', dirname(__FILE__)));
         wp_enqueue_style('feed_them_settings_css');
-        if (isset($_GET['page']) && $_GET['page'] == 'fts-facebook-feed-styles-submenu-page' || isset($_GET['page']) && $_GET['page'] == 'fts-twitter-feed-styles-submenu-page' || isset($_GET['page']) && $_GET['page'] == 'feed-them-settings-page' || isset($_GET['page']) && $_GET['page'] == 'fts-pinterest-feed-styles-submenu-page') {
+        if (isset($_GET['page']) && $_GET['page'] == 'fts-instagram-feed-styles-submenu-page' || isset($_GET['page']) && $_GET['page'] == 'fts-facebook-feed-styles-submenu-page' || isset($_GET['page']) && $_GET['page'] == 'fts-twitter-feed-styles-submenu-page' || isset($_GET['page']) && $_GET['page'] == 'feed-them-settings-page' || isset($_GET['page']) && $_GET['page'] == 'fts-pinterest-feed-styles-submenu-page') {
             wp_enqueue_script('feed_them_style_options_color_js', plugins_url('admin/js/jscolor/jscolor.js', dirname(__FILE__)));
         }
     }
@@ -494,6 +705,7 @@ class feed_them_social_functions {
             'fb_feed_margin',
             'fb_feed_padding',
             'fb_feed_background_color',
+            'fb_grid_border_bottom_color',
             'fb_grid_posts_background_color',
             'fb_border_bottom_color',
             'fts_facebook_custom_api_token',
@@ -509,6 +721,15 @@ class feed_them_social_functions {
             'fb_reviews_backg_color',
             'fb_reviews_star_language',
             'fb_reviews_see_more_reviews_language',
+            'fb_reviews_see_more_reviews_language',
+            'fb_reviews_overall_rating_background_border_hide',
+            'fb_reviews_overall_rating_background_color',
+            'fb_reviews_overall_rating_border_color',
+            'fb_reviews_overall_rating_text_color',
+            'fb_reviews_overall_rating_background_padding',
+            'fb_reviews_remove_see_reviews_link',
+            'fb_reviews_overall_rating_of_5_stars_text',
+            'fb_reviews_overall_rating_reviews_text',
             'fb_max_image_width',
             'fb_hide_images_in_posts',
             'fb_count_offset',
@@ -517,6 +738,8 @@ class feed_them_social_functions {
             'fts_facebook_custom_api_token_user_name',
             'fts_facebook_custom_api_token_user_id_biz',
             'fts_facebook_custom_api_token_user_name_biz',
+            'fb_loadmore_background_color',
+            'fb_loadmore_text_color',
         );
         $this->register_settings('fts-facebook-feed-style-options', $fb_style_options);
     }
@@ -544,12 +767,16 @@ class feed_them_social_functions {
             'twitter_feed_padding',
             'twitter_feed_background_color',
             'twitter_border_bottom_color',
+            'twitter_grid_posts_background_color',
+            'twitter_grid_border_bottom_color',
             'fts_twitter_custom_consumer_key',
             'fts_twitter_custom_consumer_secret',
             'fts_twitter_custom_access_token',
             'fts_twitter_custom_access_token_secret',
             'fts_twitter_hide_images_in_posts',
             'twitter_max_image_width',
+            'twitter_loadmore_background_color',
+            'twitter_loadmore_text_color',
         );
         $this->register_settings('fts-twitter-feed-style-options', $twitter_style_options);
     }
@@ -566,6 +793,8 @@ class feed_them_social_functions {
             'fts_instagram_custom_api_token',
             'instagram_show_follow_btn',
             'instagram_show_follow_btn_where',
+            'instagram_loadmore_background_color',
+            'instagram_loadmore_text_color',
         );
         $this->register_settings('fts-instagram-feed-style-options', $instagram_style_options);
     }
@@ -786,10 +1015,19 @@ class feed_them_social_functions {
         $fb_feed_padding = get_option('fb_feed_padding');
         $fb_feed_background_color = get_option('fb_feed_background_color');
         $fb_grid_posts_background_color = get_option('fb_grid_posts_background_color');
+        $fb_grid_border_bottom_color = get_option('fb_grid_border_bottom_color');
+        $fb_loadmore_background_color = get_option('fb_loadmore_background_color');
+        $fb_loadmore_text_color = get_option('fb_loadmore_text_color');
         $fb_border_bottom_color = get_option('fb_border_bottom_color');
         $fb_grid_posts_background_color = get_option('fb_grid_posts_background_color');
         $fb_reviews_backg_color = get_option('fb_reviews_backg_color');
         $fb_reviews_text_color = get_option('fb_reviews_text_color');
+
+        $fb_reviews_overall_rating_background_color = get_option('fb_reviews_overall_rating_background_color');
+        $fb_reviews_overall_rating_border_color = get_option('fb_reviews_overall_rating_border_color');
+        $fb_reviews_overall_rating_text_color = get_option('fb_reviews_overall_rating_text_color');
+        $fb_reviews_overall_rating_background_padding = get_option('fb_reviews_overall_rating_background_padding');
+
         $fb_max_image_width = get_option('fb_max_image_width');
 
         $fb_events_title_color = get_option('fb_events_title_color');
@@ -806,6 +1044,13 @@ class feed_them_social_functions {
         $twitter_feed_background_color = get_option('twitter_feed_background_color');
         $twitter_border_bottom_color = get_option('twitter_border_bottom_color');
         $twitter_max_image_width = get_option('twitter_max_image_width');
+        $twitter_grid_border_bottom_color = get_option('twitter_grid_border_bottom_color');
+        $twitter_grid_posts_background_color = get_option('twitter_grid_posts_background_color');
+        $twitter_loadmore_background_color = get_option('twitter_loadmore_background_color');
+        $twitter_loadmore_text_color = get_option('twitter_loadmore_text_color');
+
+        $instagram_loadmore_background_color = get_option('instagram_loadmore_background_color');
+        $instagram_loadmore_text_color = get_option('instagram_loadmore_text_color');
 
         $pinterest_board_title_color = get_option('pinterest_board_title_color');
         $pinterest_board_title_size = get_option('pinterest_board_title_size');
@@ -822,6 +1067,21 @@ class feed_them_social_functions {
                 color: <?php echo $fb_header_extra_text_color ?> !important;
             }
 
+            <?php }if (!empty($fb_loadmore_background_color)) { ?>
+            .fts-fb-load-more-wrapper .fts-fb-load-more {
+                background: <?php echo $fb_loadmore_background_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_loadmore_text_color)) { ?>
+            .fts-fb-load-more-wrapper .fts-fb-load-more {
+                color: <?php echo $fb_loadmore_text_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_loadmore_text_color)) { ?>
+            .fts-fb-load-more-wrapper .fts-fb-spinner>div {
+                background: <?php echo $fb_loadmore_text_color ?> !important;
+            }
+
             <?php }if (!empty($fb_text_color)) { ?>
             .fts-simple-fb-wrapper .fts-jal-single-fb-post,
             .fts-simple-fb-wrapper .fts-jal-fb-description-wrap,
@@ -834,9 +1094,7 @@ class feed_them_social_functions {
 
             <?php }if (!empty($fb_link_color)) { ?>
             .fts-simple-fb-wrapper .fts-jal-single-fb-post a,
-            .fts-fb-load-more-wrapper .fts-fb-load-more,
-            .fts-slicker-facebook-posts .fts-jal-single-fb-post a,
-            .fts-fb-load-more-wrapper .fts-fb-load-more {
+            .fts-slicker-facebook-posts .fts-jal-single-fb-post a {
                 color: <?php echo $fb_link_color ?> !important;
             }
 
@@ -896,13 +1154,63 @@ class feed_them_social_functions {
             }
 
             <?php }if (!empty($fb_border_bottom_color)) { ?>
-            .fts-slicker-facebook-posts .fts-jal-single-fb-post, .fts-jal-single-fb-post {
-                border-bottom: 1px solid <?php echo $fb_border_bottom_color ?> !important;
+            .fts-jal-single-fb-post {
+                border-bottom-color: <?php echo $fb_border_bottom_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_grid_border_bottom_color)) { ?>
+            .fts-slicker-facebook-posts .fts-jal-single-fb-post {
+                border-bottom-color: <?php echo $fb_grid_border_bottom_color ?> !important;
+            }
+
+            <?php }if (!empty($twitter_grid_posts_background_color)) { ?>
+            .fts-slicker-twitter-posts .fts-tweeter-wrap  {
+                background: <?php echo $twitter_grid_posts_background_color ?> !important;
+            }
+
+            <?php }if (!empty($twitter_grid_border_bottom_color)) { ?>
+            .fts-slicker-twitter-posts .fts-tweeter-wrap {
+                border-bottom-color: <?php echo $twitter_grid_border_bottom_color ?> !important;
+            }
+
+            <?php }if (!empty($twitter_loadmore_background_color)) { ?>
+            .fts-twitter-load-more-wrapper .fts-fb-load-more {
+                background: <?php echo $twitter_loadmore_background_color ?> !important;
+            }
+
+            <?php }if (!empty($twitter_loadmore_text_color)) { ?>
+            .fts-twitter-load-more-wrapper .fts-fb-load-more {
+                color: <?php echo $twitter_loadmore_text_color ?> !important;
+            }
+
+            <?php }if (!empty($twitter_loadmore_text_color)) { ?>
+            .fts-twitter-load-more-wrapper .fts-fb-spinner>div {
+                background: <?php echo $twitter_loadmore_text_color ?> !important;
             }
 
             <?php }if (!empty($fb_reviews_backg_color)) { ?>
             .fts-review-star {
                 background: <?php echo $fb_reviews_backg_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_reviews_overall_rating_background_color)) { ?>
+            .fts-review-details-master-wrap {
+                background: <?php echo $fb_reviews_overall_rating_background_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_reviews_overall_rating_border_color)) { ?>
+            .fts-review-details-master-wrap {
+                border-bottom-color: <?php echo $fb_reviews_overall_rating_border_color ?> !important;
+            }
+
+            <?php }if (!empty($fb_reviews_overall_rating_background_padding)) { ?>
+            .fts-review-details-master-wrap {
+                padding: <?php echo $fb_reviews_overall_rating_background_padding ?> !important;
+            }
+
+            <?php }if (!empty($fb_reviews_overall_rating_text_color)) { ?>
+            .fts-review-details-master-wrap {
+                color: <?php echo $fb_reviews_overall_rating_text_color ?> !important;
             }
 
             <?php }if (!empty($fb_reviews_text_color)) { ?>
@@ -956,6 +1264,21 @@ class feed_them_social_functions {
                 display: block;
             }
 
+            <?php }if (!empty($instagram_loadmore_background_color)) { ?>
+            .fts-instagram-load-more-wrapper .fts-fb-load-more {
+                background: <?php echo $instagram_loadmore_background_color ?> !important;
+            }
+
+            <?php }if (!empty($instagram_loadmore_text_color)) { ?>
+            .fts-instagram-load-more-wrapper .fts-fb-load-more {
+                color: <?php echo $instagram_loadmore_text_color ?> !important;
+            }
+
+            <?php }if (!empty($instagram_loadmore_text_color)) { ?>
+            .fts-instagram-load-more-wrapper .fts-fb-spinner>div {
+                background: <?php echo $instagram_loadmore_text_color ?> !important;
+            }
+
             <?php } if (!empty($pinterest_board_backg_hover_color)) { ?>
             a.fts-pin-board-wrap:hover {
                 background: <?php echo $pinterest_board_backg_hover_color ?> !important;
@@ -997,7 +1320,7 @@ class feed_them_social_functions {
      * @since 2.0.7
      */
     function need_fts_premium_plugin_field($fields_info) {
-        $output = '<div class="feed-them-social-admin-input-default">'.$fields_info['no_active_msg'].'</div>';
+        $output = '<div class="feed-them-social-admin-input-default">' . $fields_info['no_active_msg'] . '</div>';
         return $output;
     }
 
@@ -1014,7 +1337,7 @@ class feed_them_social_functions {
         $output = '';
         //Start creation of fields for each Feed
         foreach ($feed_settings_array as $section => $section_info) {
-            $output .= '<div class="' . $section_info['section_wrap_class'].'">';
+            $output .= '<div class="' . $section_info['section_wrap_class'] . '">';
             $output .= '<form class="feed-them-social-admin-form shortcode-generator-form ' . $section_info['form_wrap_classes'] . '" id="' . $section_info['form_wrap_id'] . '">';
 
             //Check to see if token is in place otherwise show a message letting person no what they need to do
@@ -1043,18 +1366,18 @@ class feed_them_social_functions {
 
             //Conversion Input
             if (isset($section_info['conversion_input'])) {
-                $output .= '<div class="'.$section_info['conversion_input']['main_wrap_class'].'">';
-                $output .= '<h2>'.$section_info['conversion_input']['conv_section_title'].'</h2>';
-                $output .= '<div class="feed-them-social-admin-input-wrap '.$section_info['conversion_input']['input_wrap_class'].'">';
+                $output .= '<div class="' . $section_info['conversion_input']['main_wrap_class'] . '">';
+                $output .= '<h2>' . $section_info['conversion_input']['conv_section_title'] . '</h2>';
+                $output .= '<div class="feed-them-social-admin-input-wrap ' . $section_info['conversion_input']['input_wrap_class'] . '">';
                 //Instructional Text
-                $output .= '<div class="instructional-text">'.$section_info['conversion_input']['instructional-text'] . '</div>';
+                $output .= '<div class="instructional-text">' . $section_info['conversion_input']['instructional-text'] . '</div>';
                 $output .= '<div class="feed-them-social-admin-input-label">' . $section_info['conversion_input']['label'] . '</div>';
                 //Input
-                $output .= '<input type="input" name="'.$section_info['conversion_input']['name'].'" id="'.$section_info['conversion_input']['id'].'" class="feed-them-social-admin-input ' . (isset($section_info['conversion_input']['class']) ? $section_info['conversion_input']['class'] : '') . '" value="" />';
+                $output .= '<input type="input" name="' . $section_info['conversion_input']['name'] . '" id="' . $section_info['conversion_input']['id'] . '" class="feed-them-social-admin-input ' . (isset($section_info['conversion_input']['class']) ? $section_info['conversion_input']['class'] : '') . '" value="" />';
                 $output .= '<div class="clear"></div>';
                 $output .= '</div><!--/Conversion Input Wrap-->';
 
-                $output .= '<input type="button" class="feed-them-social-admin-submit-btn" value="'.$section_info['conversion_input']['btn-value'].'" onclick="'.$section_info['conversion_input']['onclick'].'" tabindex="4" style="margin-right:1em;" />';
+                $output .= '<input type="button" class="feed-them-social-admin-submit-btn" value="' . $section_info['conversion_input']['btn-value'] . '" onclick="' . $section_info['conversion_input']['onclick'] . '" tabindex="4" style="margin-right:1em;" />';
                 $output .= '</div>';
 
             }
@@ -1062,7 +1385,7 @@ class feed_them_social_functions {
             $output .= '</form>';
 
             //Feed Options
-            $output .= '<form class="feed-them-social-admin-form shortcode-generator-form '.$section_info['form_wrap_classes'].' '.$section.'_options_wrap">';
+            $output .= '<form class="feed-them-social-admin-form shortcode-generator-form ' . $section_info['form_wrap_classes'] . ' ' . $section . '_options_wrap">';
 
             //Create settings fields for Feed OPTIONS
             foreach ($section_info['main_options'] as $option) if (!isset($option['no_html']) || isset($option['no_html']) && $option['no_html'] !== 'yes') {
@@ -1073,54 +1396,54 @@ class feed_them_social_functions {
                 $or_required_plugin_three = isset($option['or_req_plugin_three']) && is_plugin_active($required_plugins[$option['or_req_plugin_three']]['plugin_url']) ? true : false;
 
                 //Sub option output START?
-                $output .= isset($option['sub_options']) ? '<div class="'.$option['sub_options']['sub_options_wrap_class'].(!$required_plugin ? ' not-active-premium-fields':'').'">' . (isset($option['sub_options']['sub_options_title']) ? '<h3>' . $option['sub_options']['sub_options_title'] . '</h3>' : '') . (isset($option['sub_options']['sub_options_instructional_txt']) ? '<div class="instructional-text">' . $option['sub_options']['sub_options_instructional_txt'] . '</div>' : '') : '';
+                $output .= isset($option['sub_options']) ? '<div class="' . $option['sub_options']['sub_options_wrap_class'] . (!$required_plugin ? ' not-active-premium-fields' : '') . '">' . (isset($option['sub_options']['sub_options_title']) ? '<h3>' . $option['sub_options']['sub_options_title'] . '</h3>' : '') . (isset($option['sub_options']['sub_options_instructional_txt']) ? '<div class="instructional-text">' . $option['sub_options']['sub_options_instructional_txt'] . '</div>' : '') : '';
 
-                $output .= isset($option['grouped_options_title']) ? '<h3 class="sectioned-options-title">'.$option['grouped_options_title'].'</h3>' : '';
+                $output .= isset($option['grouped_options_title']) ? '<h3 class="sectioned-options-title">' . $option['grouped_options_title'] . '</h3>' : '';
 
-                    //Only on a few options generally
-                    $output .= isset($option['outer_wrap_class']) || isset($option['outer_wrap_display']) ? '<div ' . (isset($option['outer_wrap_class']) ? 'class="' . $option['outer_wrap_class'] . '"' : '') . ' ' . (isset($option['outer_wrap_display']) && !empty($option['outer_wrap_display']) ? 'style="display:' . $option['outer_wrap_display'] . '"' : '') . '>' : '';
-                    //Main Input Wrap
-                    $output .= '<div class="feed-them-social-admin-input-wrap ' . (isset($option['input_wrap_class']) ? $option['input_wrap_class'] : '') . '" ' . (isset($section_info['input_wrap_id']) ? 'id="' . $section_info['input_wrap_id'] . '"' : '') . '>';
-                    //Instructional Text
-                    $output .= !empty($option['instructional-text']) && !is_array($option['instructional-text']) ? '<div class="instructional-text ' . (isset($option['instructional-class']) ? $option['instructional-class'] : '') . '">' . $option['instructional-text'] . '</div>' : '';
+                //Only on a few options generally
+                $output .= isset($option['outer_wrap_class']) || isset($option['outer_wrap_display']) ? '<div ' . (isset($option['outer_wrap_class']) ? 'class="' . $option['outer_wrap_class'] . '"' : '') . ' ' . (isset($option['outer_wrap_display']) && !empty($option['outer_wrap_display']) ? 'style="display:' . $option['outer_wrap_display'] . '"' : '') . '>' : '';
+                //Main Input Wrap
+                $output .= '<div class="feed-them-social-admin-input-wrap ' . (isset($option['input_wrap_class']) ? $option['input_wrap_class'] : '') . '" ' . (isset($section_info['input_wrap_id']) ? 'id="' . $section_info['input_wrap_id'] . '"' : '') . '>';
+                //Instructional Text
+                $output .= !empty($option['instructional-text']) && !is_array($option['instructional-text']) ? '<div class="instructional-text ' . (isset($option['instructional-class']) ? $option['instructional-class'] : '') . '">' . $option['instructional-text'] . '</div>' : '';
 
-                    if(!empty($option['instructional-text']) && is_array($option['instructional-text'])){
-                        foreach($option['instructional-text'] as $instructional_txt){
-                            //Instructional Text
-                            $output .= '<div class="instructional-text ' . (isset($instructional_txt['class']) ? $instructional_txt['class'] : '') . '">' . $instructional_txt['text'] . '</div>';
-                        }
+                if (!empty($option['instructional-text']) && is_array($option['instructional-text'])) {
+                    foreach ($option['instructional-text'] as $instructional_txt) {
+                        //Instructional Text
+                        $output .= '<div class="instructional-text ' . (isset($instructional_txt['class']) ? $instructional_txt['class'] : '') . '">' . $instructional_txt['text'] . '</div>';
                     }
+                }
 
-                    //Label Text
-                    $output .= isset($option['label']) && !is_array($option['label']) ? '<div class="feed-them-social-admin-input-label ' . (isset($option['label_class']) ? $option['label_class'] : '') . '">' . $option['label'] . '</div>': '';
+                //Label Text
+                $output .= isset($option['label']) && !is_array($option['label']) ? '<div class="feed-them-social-admin-input-label ' . (isset($option['label_class']) ? $option['label_class'] : '') . '">' . $option['label'] . '</div>' : '';
 
-                    if(!empty($option['label']) && is_array($option['label'])){
-                        foreach($option['label'] as $label_txt){
-                            //Label Text
-                            $output .= '<div class="feed-them-social-admin-input-label ' . (isset($label_txt['class']) ? $label_txt['class'] : '') . '">' . $label_txt['text'] . '</div>';
-                        }
+                if (!empty($option['label']) && is_array($option['label'])) {
+                    foreach ($option['label'] as $label_txt) {
+                        //Label Text
+                        $output .= '<div class="feed-them-social-admin-input-label ' . (isset($label_txt['class']) ? $label_txt['class'] : '') . '">' . $label_txt['text'] . '</div>';
                     }
+                }
 
-                    if ($required_plugin || $or_required_plugin || $or_required_plugin_three) {
-                        //Option_Type = INPUT
-                        $output .= isset($option['option_type']) && $option['option_type'] == 'input' ? '<input type="' . $option['type'] . '" name="' . $option['name'] . '" id="' . $option['id'] . '" class="feed-them-social-admin-input ' . (isset($option['class']) ? $option['class'] : '') . '" placeholder="' . (isset($option['placeholder']) ? $option['placeholder'] : '') . '" value="' . (isset($option['value']) ? '' . $option['value'] : '') . '" />' : '';
+                if ($required_plugin || $or_required_plugin || $or_required_plugin_three) {
+                    //Option_Type = INPUT
+                    $output .= isset($option['option_type']) && $option['option_type'] == 'input' ? '<input type="' . $option['type'] . '" name="' . $option['name'] . '" id="' . $option['id'] . '" class="feed-them-social-admin-input ' . (isset($option['class']) ? $option['class'] : '') . '" placeholder="' . (isset($option['placeholder']) ? $option['placeholder'] : '') . '" value="' . (isset($option['value']) ? '' . $option['value'] : '') . '" />' : '';
 
-                        //Option_Type = Select
-                        if ( isset($option['option_type']) && $option['option_type'] == 'select') {
-                            $output .= '<select name="' . $option['name'] . '" id="' . $option['id'] . '"  class="feed-them-social-admin-input">';
-                            foreach($option['options'] as $select_option){
-                                $output .= '<option value="'.$select_option['value'].'">'.$select_option['label'].'</option>';
-                            }
-                            $output .='</select>';
+                    //Option_Type = Select
+                    if (isset($option['option_type']) && $option['option_type'] == 'select') {
+                        $output .= '<select name="' . $option['name'] . '" id="' . $option['id'] . '"  class="feed-them-social-admin-input">';
+                        foreach ($option['options'] as $select_option) {
+                            $output .= '<option value="' . $select_option['value'] . '">' . $select_option['label'] . '</option>';
                         }
-                    } else {
-                        //Create Required Plugin fields
-                        $output .= $this->need_fts_premium_plugin_field($required_plugins[$option['req_plugin']]);
+                        $output .= '</select>';
                     }
-                    $output .= '<div class="clear"></div>';
-                    $output .= '</div><!--/feed-them-social-admin-input-wrap-->';
+                } else {
+                    //Create Required Plugin fields
+                    $output .= $this->need_fts_premium_plugin_field($required_plugins[$option['req_plugin']]);
+                }
+                $output .= '<div class="clear"></div>';
+                $output .= '</div><!--/feed-them-social-admin-input-wrap-->';
 
-                    $output .= isset($option['outer_wrap_class']) || isset($option['outer_wrap_display']) ? '</div>' : '';
+                $output .= isset($option['outer_wrap_class']) || isset($option['outer_wrap_display']) ? '</div>' : '';
 
                 //Sub option output END?
                 if (isset($option['sub_options_end'])) {
@@ -1135,14 +1458,14 @@ class feed_them_social_functions {
                     }
                 }
             }
-            $output .= $this->generate_shortcode('updateTextArea_' . $section . '();', $section_info['generator_title'], $section_info['generator_class']).'</form>';
+            $output .= $this->generate_shortcode('updateTextArea_' . $section . '();', $section_info['generator_title'], $section_info['generator_class']) . '</form>';
 
             $output .= '</div> <!--/Section Wrap Class END (Main-Section-Div)-->';
 
             //Premium Message Boxes
             if (isset($section_info['premium_msg_boxes'])) {
-                foreach ($section_info['premium_msg_boxes'] as $key => $premium_msg) if(!is_plugin_active($required_plugins[$premium_msg['req_plugin']]['plugin_url'])){
-                    $output .= '<div class="feed-them-social-admin-input-wrap fts-premium-options-message" id="not_active_'.$key.'"><a class="not-active-title" href="'.$required_plugins[$premium_msg['req_plugin']]['slick_url'].'" target="_blank">'.$required_plugins[$premium_msg['req_plugin']]['name'].'</a>'.$premium_msg['msg'].'</div>';
+                foreach ($section_info['premium_msg_boxes'] as $key => $premium_msg) if (!is_plugin_active($required_plugins[$premium_msg['req_plugin']]['plugin_url'])) {
+                    $output .= '<div class="feed-them-social-admin-input-wrap fts-premium-options-message" id="not_active_' . $key . '"><a class="not-active-title" href="' . $required_plugins[$premium_msg['req_plugin']]['slick_url'] . '" target="_blank">' . $required_plugins[$premium_msg['req_plugin']]['name'] . '</a>' . $premium_msg['msg'] . '</div>';
                 }
             }
         }
@@ -1157,8 +1480,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_facebook_list_of_events_form($save_options = false)
-    {
+    function fts_facebook_list_of_events_form($save_options = false) {
         if ($save_options) {
             $fb_event_id_option = get_option('fb_event_id');
             $fb_event_post_count_option = get_option('fb_event_post_count');
@@ -1224,8 +1546,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_facebook_event_form($save_options = false)
-    {
+    function fts_facebook_event_form($save_options = false) {
         if ($save_options) {
             $fb_event_id_option = get_option('fb_event_id');
             $fb_event_post_count_option = get_option('fb_event_post_count');
@@ -1289,8 +1610,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_facebook_group_form($save_options = false)
-    {
+    function fts_facebook_group_form($save_options = false) {
         if ($save_options) {
             $fb_group_id_option = get_option('fb_group_id');
             $fb_group_post_count_option = get_option('fb_group_post_count');
@@ -1364,8 +1684,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_facebook_page_form($save_options = false)
-    {
+    function fts_facebook_page_form($save_options = false) {
         if ($save_options) {
             $fb_page_id_option = get_option('fb_page_id');
             $fb_page_posts_displayed_option = get_option('fb_page_posts_displayed');
@@ -1462,8 +1781,8 @@ class feed_them_social_functions {
         $output .= '<div class="feed-them-social-admin-input-wrap">';
         $output .= '<div class="feed-them-social-admin-input-label">' . __('# of Posts', 'feed-them-premium');
 
-        if (is_plugin_active('feed-them-premium/feed-them-premium.php') || is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php')) {}
-        else {
+        if (is_plugin_active('feed-them-premium/feed-them-premium.php') || is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php')) {
+        } else {
             $output .= '<br/><small>' . __('More than 6 Requires <a target="_blank" href="http://www.slickremix.com/downloads/feed-them-social-premium-extension/">Premium version</a>', 'feed-them-premium') . '</small>';
         }
         $output .= '</div>';
@@ -1634,8 +1953,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_twitter_form($save_options = false)
-    {
+    function fts_twitter_form($save_options = false) {
         if ($save_options) {
             $twitter_name_option = get_option('twitter_name');
             $tweets_count_option = get_option('tweets_count');
@@ -1743,8 +2061,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_vine_form()
-    {
+    function fts_vine_form() {
         $output = '<div class="fts-vine-shortcode-form">';
         $output .= '<form class="feed-them-social-admin-form shortcode-generator-form vine-shortcode-form" id="fts-vine-form">';
         $output .= '<h2>' . __('Vine Shortcode Generator', 'feed-them-social') . '</h2>';
@@ -1807,8 +2124,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.7
      */
-    function fts_instagram_form($save_options = false)
-    {
+    function fts_instagram_form($save_options = false) {
         if ($save_options) {
             $instagram_name_option = get_option('convert_instagram_username');
             $instagram_id_option = get_option('instagram_id');
@@ -1950,8 +2266,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_youtube_form($save_options = false)
-    {
+    function fts_youtube_form($save_options = false) {
         if ($save_options) {
             $youtube_name_option = get_option('youtube_name');
             $youtube_vid_count_option = get_option('youtube_vid_count');
@@ -1995,8 +2310,7 @@ class feed_them_social_functions {
      * @return string
      * @since 1.9.6
      */
-    function fts_pinterest_form($save_options = false)
-    {
+    function fts_pinterest_form($save_options = false) {
         if ($save_options) {
             $pinterest_name_option = get_option('pinterest_name');
             $boards_count_option = get_option('boards_count');
@@ -2418,13 +2732,14 @@ class feed_them_social_functions {
 
         if ($ftsCustomDate == '' && $ftsCustomTime == '') {
             $CustomDateFormat = $CustomDateCheck;
-        } else if ($ftsCustomDate !== '' || $ftsCustomTime !== '') {
+        } elseif ($ftsCustomDate !== '' || $ftsCustomTime !== '') {
             $CustomDateFormat = $ftsCustomDate . ' ' . $ftsCustomTime;
         } else {
             $CustomDateFormat = 'F jS, Y \a\t g:ia';
         }
-
-        date_default_timezone_set($fts_timezone);
+        if(!empty($fts_timezone)){
+            date_default_timezone_set($fts_timezone);
+        }
         // Twitter date time
         if ($feed_type == 'twitter') {
             if ($fts_twitter_offset_time == 1) {
@@ -2435,47 +2750,43 @@ class feed_them_social_functions {
             if ($CustomDateCheck == 'one-day-ago') {
                 $uTime = $this->fts_ago($created_time);
             } else {
-                $uTime = date_i18n($CustomDateFormat, $fts_twitter_offset_time_final);
+                $uTime = !empty($CustomDateCheck) ? date_i18n($CustomDateFormat, $fts_twitter_offset_time_final) : $this->fts_ago($created_time);
             }
         }
         // Instagram date time
         if ($feed_type == 'instagram') {
             if ($CustomDateCheck == 'one-day-ago') {
                 $uTime = $this->fts_ago($created_time);
-            } elseif ($CustomDateCheck !== '') {
-                $uTime = date_i18n($CustomDateFormat, $created_time);
-            } else {
-                $uTime = isset($created_time) ? date_i18n('F j, Y', $created_time) : "";
+            }
+            else {
+                $uTime = !empty($CustomDateCheck) ? date_i18n($CustomDateFormat, $created_time) : $this->fts_ago($created_time);
             }
         }
         // Youtube and Pinterest date time
         if ($feed_type == 'youtube' || $feed_type == 'pinterest') {
             if ($CustomDateCheck == 'one-day-ago') {
                 $uTime = $this->fts_ago($created_time);
-            } elseif ($CustomDateCheck !== '') {
-                $uTime = date_i18n($CustomDateFormat, strtotime($created_time));
-            } else {
-                $uTime = isset($created_time) ? date_i18n('F j, Y', strtotime($created_time)) : "";
+            }
+            else {
+                $uTime = !empty($CustomDateCheck) ? date_i18n($CustomDateFormat, strtotime($created_time)) : $this->fts_ago($created_time);
             }
         }
         // Facebook date time
         if ($feed_type == 'facebook') {
             $timeSet = $fts_timezone;
-            $timeSetCheck = isset($timeSet) && $timeSet ? $timeSet : 'America/New_York';
+            $timeSetCheck = isset($timeSet) ? $timeSet : 'America/New_York';
             date_default_timezone_set($timeSetCheck);
 
             if ($CustomDateCheck == 'one-day-ago') {
                 $uTime = $this->fts_ago($created_time);
-            } elseif ($CustomDateCheck !== '') {
-                $uTime = date_i18n($CustomDateFormat, $created_time);
-            } else {
-                $uTime = date_i18n('F jS, Y \a\t g:ia');
+            }
+            else {
+                $uTime = !empty($CustomDateCheck) ? date_i18n($CustomDateFormat, $created_time) : $this->fts_ago($created_time);
             }
         }
         //Return the time
         return $uTime;
     }
-
 
     function fts_youtube_link_filter($youtube_description) {
         //Converts URLs to Links

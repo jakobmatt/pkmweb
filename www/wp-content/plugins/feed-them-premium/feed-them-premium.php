@@ -3,13 +3,13 @@
 Plugin Name: Feed Them Social Premium
 Plugin URI: http://slickremix.com/
 Description: This is the Premium Extension for the Free version of Feed Them Social.
-Version: 1.6.6
+Version: 1.6.9
 Author: SlickRemix
 Author URI: http://slickremix.com/
 Requires at least: wordpress 4.5
 Requires at Feed Them Social: 2.1.0
 Tested up to: wordpress 4.7.0
-Stable tag: 1.6.6
+Stable tag: 1.6.9
 
  * @package    	Feed Them Social Premium
  * @category   	Core 
@@ -19,7 +19,7 @@ Stable tag: 1.6.6
 Need Support? http://www.slickremix.com/support-forum/forum/feed-them-social-2/
 */
 
-define('FTS_PREMIUM_CURRENT_VERSION', '1.6.6'); // Affects updater files.
+define('FTS_PREMIUM_CURRENT_VERSION', '1.6.9'); // Affects updater files.
 
 if (!function_exists('is_plugin_active'))
     require_once(ABSPATH . '/wp-admin/includes/plugin.php');

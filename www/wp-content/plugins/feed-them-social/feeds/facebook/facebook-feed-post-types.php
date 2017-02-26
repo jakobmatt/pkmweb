@@ -492,10 +492,9 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
             case 'video'  :
                 $video_data = json_decode($response_post_array[$post_data_key . '_video']);
 
-
-            //  echo '<pre>';
-            //    print_r($video_data);
-            //  echo '</pre>';
+             // echo '<pre>';
+             //   print_r($video_data);
+             // echo '</pre>';
 
                 $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-vid-wrap">';
 
@@ -537,10 +536,8 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                         $FTS_FB_OUTPUT .= '</div>';
                         $FTS_FB_OUTPUT .= '<div class="fts-fluid-videoWrapper-html5"><video id="' . $fts_dynamic_vid_name . '" controls width="100%;" style="max-width:100%;"><source src="" type="video/mp4"></video></div><div class="slicker-facebook-album-photoshadow"></div></div>';
 
-                        //This edit was made by the developers at slickremix to fix a php notice about the popup not being set.
-                        $popupSet = isset($FB_Shortcode['popup']) ? $FB_Shortcode['popup'] : '';
-                        // This puts the video in a popup instead of displaying it directly on the page.
-                        if (!isset($popupSet) && $popupSet !== 'yes') {
+                        // This puts the video on the page instead of the popup if you don't have the premium version
+                        if (!isset($FB_Shortcode['popup']) || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !=='yes' && is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == '' || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'no') {
                             $FTS_FB_OUTPUT .= '<script>jQuery(document).ready(function() {';
                             $FTS_FB_OUTPUT .= 'jQuery(".' . $fts_dynamic_vid_name . '").bind("click", function() {';
                             $FTS_FB_OUTPUT .= 'jQuery(this).addClass("fts-vid-div");';
@@ -560,8 +557,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                         $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-vid-picture ' . $fts_dynamic_vid_name . '">';
 
 
-                        // This puts the video in a popup instead of displaying it directly on the page.
-                        if (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'yes' && !strpos($FBvideo_embed, 'soundcloud') > 0) {
+
 
                             if (strpos($FBvideo_embed, 'youtube') > 0 || strpos($FBvideo_embed, 'youtu.be') > 0) {
                                 preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $FBvideo_embed, $matches);
@@ -569,6 +565,8 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                             } else {
                                 $videoURLfinal = $FBvideo_embed;
                             }
+                        // This puts the video in a popup instead of displaying it directly on the page.
+                        if (is_plugin_active('feed-them-premium/feed-them-premium.php') && isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'yes' && !strpos($FBvideo_embed, 'soundcloud') > 0) {
 
                             $FTS_FB_OUTPUT .= '<a href="' . $videoURLfinal . '" class="fts-facebook-link-target fts-jal-fb-vid-image fts-iframe-type">';
                         }
@@ -590,8 +588,8 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                             //  preg_match($pattern, $FBlink, $matches);
                             //  $youtubeURLfinal = $matches[1];
 
-                            // This puts the video in a popup instead of displaying it directly on the page.
-                            if (isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !== 'yes') {
+                            // This puts the video on the page instead of the popup if you don't have the premium version
+                            if (!isset($FB_Shortcode['popup']) || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !=='yes' && is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == '' || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'no') {
                                 $FTS_FB_OUTPUT .= '<script>jQuery(document).ready(function() {';
                                 $FTS_FB_OUTPUT .= 'jQuery(".' . $fts_dynamic_vid_name . '").click(function() {';
                                 $FTS_FB_OUTPUT .= 'jQuery(this).addClass("fts-vid-div");';
@@ -611,7 +609,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                             //  preg_match($pattern, $FBlink, $matches);
                             //  $youtubeURLfinal = $matches[1];
                             // This puts the video in a popup instead of displaying it directly on the page.
-                            if (isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !== 'yes') {
+                            if (!isset($FB_Shortcode['popup']) || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !=='yes' && is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == ' ' || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'no') {
                                 $FTS_FB_OUTPUT .= '<script>';
                                 $FTS_FB_OUTPUT .= 'jQuery(document).ready(function() {';
                                 $FTS_FB_OUTPUT .= 'jQuery(".' . $fts_dynamic_vid_name . '").click(function() {';
@@ -634,7 +632,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                             //   $vimeoURLfinal = $matches[0];
 
                             // This puts the video in a popup instead of displaying it directly on the page.
-                            if (isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !== 'yes') {
+                            if (!isset($FB_Shortcode['popup']) || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] !=='yes' && is_plugin_active('feed-them-social-facebook-reviews/feed-them-social-facebook-reviews.php') || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == '' || isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'no') {
                                 $FTS_FB_OUTPUT .= '<script>';
                                 $FTS_FB_OUTPUT .= 'jQuery(document).ready(function() {';
                                 $FTS_FB_OUTPUT .= 'jQuery(".' . $fts_dynamic_vid_name . '").click(function() {';
@@ -707,7 +705,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
 
                 $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-link-wrap fts-album-photos-wrap"';
                 if ($FB_Shortcode['type'] == 'album_photos' || $FB_Shortcode['type'] == 'albums') {
-                    $FTS_FB_OUTPUT .= 'style="line-height:' . $FB_Shortcode['image_height'] . ' !important;"';
+                    $FTS_FB_OUTPUT .= ' style="line-height:' . $FB_Shortcode['image_height'] . ' !important;"';
                 }
                 $FTS_FB_OUTPUT .= '>';
                 //   $FTS_FB_OUTPUT .= isset($FB_Shortcode['popup']) && $FB_Shortcode['popup'] == 'yes' ? '<div class="fts-fb-caption"><a href="' . $FBlink . '" class="fts-view-on-facebook-link" target="_blank">' . __('View on Facebook', 'feed-them-social') . '</a></div> ' : '';
@@ -728,7 +726,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
                 $FTS_FB_OUTPUT .= '<div class="slicker-facebook-album-photoshadow"></div>';
                 // FB Video play button for facebook videos. This button takes data from our a tag and along with additional js in the magnific-popup.js we can now load html5 videos. SO lightweight this way because no pre-loading of videos are on the page. We only show the posterboard on mobile devices because tablets and desktops will auto load the videos. SRL
                 if (isset($FB_Shortcode['video_album']) && $FB_Shortcode['video_album'] == 'yes') {
-                    if ($FB_Shortcode['play_btn'] == 'yes') {
+                    if (isset($FB_Shortcode['play_btn']) && $FB_Shortcode['play_btn'] == 'yes') {
                         $fb_play_btn_visible = isset($FB_Shortcode['play_btn_visible']) && $FB_Shortcode['play_btn_visible'] == 'yes' ? ' visible-video-button' : '';
                         $post_data_source = isset($post_data->source) ? $post_data->source : '';
                         $post_data_format_3_picture = isset($post_data->format[3]->picture) ? $post_data->format[3]->picture : '';
@@ -761,7 +759,7 @@ class FTS_Facebook_Feed_Post_Types extends FTS_Facebook_Feed
             case 'album':
                 $FTS_FB_OUTPUT .= '<div class="fts-jal-fb-link-wrap fts-album-photos-wrap"';
                 if ($FB_Shortcode['type'] == 'album_photos' || $FB_Shortcode['type'] == 'albums') {
-                    $FTS_FB_OUTPUT .= 'style="line-height:' . $FB_Shortcode['image_height'] . ' !important;"';
+                    $FTS_FB_OUTPUT .= ' style="line-height:' . $FB_Shortcode['image_height'] . ' !important;"';
                 }
                 $FTS_FB_OUTPUT .= '>';
                 //Output Photo Picture
