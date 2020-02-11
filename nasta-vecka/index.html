@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='sv'>
-    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0&idag=1 -->
+    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0&idag=1&sondagforst=1 -->
 
 	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -17,6 +17,7 @@
 
 		<script>
 		var calendar;
+        var next_sunday_primary_event = undefined;
 
         function getUrlVars() {
             var vars = {};
@@ -35,8 +36,30 @@
             return urlparameter;
         }
 
+        function handleNextSundayMessage(next_sunday_primary_event) {
+            var text = "";
+            if (next_sunday_primary_event !== undefined)
+            {
+                text = "<p>Nästa söndag kl " + next_sunday_primary_event.start.getHours();
+                if (next_sunday_primary_event.start.getMinutes() > 0)
+                {
+                    text += "." + next_sunday_primary_event.start.getMinutes();
+                }
+                text += " " + next_sunday_primary_event.title + "</p>";
+                if (next_sunday_primary_event.extendedProps.description !== "")
+                {
+                    text += next_sunday_primary_event.extendedProps.description + "<br/>"; //desc already has <p>
+                }
+            }
+            //console.log("Updating handleNextSundayMessage");
+            console.log(text);
+            var div = document.getElementById('next-sunday');
+            
+            div.innerHTML = text;
+        }
+
         // Defining event listener function
-        function handleWindowSize(){
+        function handleWindowSize() {
             // Get width and height of the window excluding scrollbars
             var w = document.documentElement.clientWidth;
             var h = document.documentElement.clientHeight;
@@ -66,26 +89,67 @@
             			displayEventEnd: false, // don't display event end time
             			//listDayAltFormat: 'D',
                         eventRender: function(info) {
-                            //console.log(info.el.querySelector('.fc-list-item-title').innerHTML);
-                            var titleObj = info.el.querySelector('.fc-title, .fc-list-item-title');
-                            titleObj.innerHTML = '<a href=' + info.event.url + '>' + info.event.title + '</a>';
-                            if (typeof info.event.extendedProps.location !== "undefined")
+                            if (info.isStart == true)
                             {
-                                if (parseInt(getUrlParam('plats', '1')) == 1)
+                                //console.log(info.el.querySelector('.fc-list-item-title').innerHTML);
+                                var titleObj = info.el.querySelector('.fc-title, .fc-list-item-title');
+                                titleObj.innerHTML = '<a href=' + info.event.url + '>' + info.event.title + '</a>';
+                                if (typeof info.event.extendedProps.location !== "undefined")
                                 {
-                                    titleObj.innerHTML += ', ' + info.event.extendedProps.location + '<br/>';
-                                    //console.log(info.event.extendedProps.location);
+                                    if (parseInt(getUrlParam('plats', '1')) == 1)
+                                    {
+                                        titleObj.innerHTML += ', ' + info.event.extendedProps.location + '<br/>';
+                                        //console.log(info.event.extendedProps.location);
+                                    }
+                                }
+                                if (typeof info.event.extendedProps.description !== "undefined")
+                                {
+                                    if (parseInt(getUrlParam('text', '0')) == 1)
+                                    {
+                                        titleObj.innerHTML += info.event.extendedProps.description; 
+                                        //console.log(info.event.extendedProps.description);
+                                    }
+                                    // check if event is for next sunday primary service
+                                    if (0 == info.event.start.getDay())
+                                    {
+                                        if (info.event.title.toLowerCase().includes("gudstjänst"))
+                                        {
+                                            if (11 == info.event.start.getHours())
+                                            {
+                                                next_sunday_primary_event = info.event;
+                                            }
+                                            else if (info.event.extendedProps.description.toLowerCase().includes("predikan"))
+                                            {
+                                                if (next_sunday_primary_event == undefined)
+                                                {
+                                                    next_sunday_primary_event = info.event;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (next_sunday_primary_event == undefined)
+                                                {
+                                                    next_sunday_primary_event = info.event;
+                                                }
+                                                else
+                                                {
+                                                    // pick the event closest to 11.00
+                                                    if (info.event.start.getHours() < next_sunday_primary_event.start.getHours())
+                                                    {
+                                                        next_sunday_primary_event = info.event;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //console.log(next_sunday_primary_event);
+                                }
+                                if (parseInt(getUrlParam('sondagforst', '0')) == 1)
+                                {
+                                    console.log("sondagforst: Ändrar text");
+                            		handleNextSundayMessage(next_sunday_primary_event);
                                 }
                             }
-                            if (typeof info.event.extendedProps.description !== "undefined")
-                            {
-                                if (parseInt(getUrlParam('text', '0')) == 1)
-                                {
-                                    titleObj.innerHTML += info.event.extendedProps.description; 
-                                    //console.log(info.event.extendedProps.description);
-                                }
-                            }
-                            //console.log(titleObj.innerHTML);
                         },
                         height: 'parent',
                         header: { 
@@ -147,7 +211,7 @@
             });
 
 		});
-
+		
 		</script>
 		<style>
 
@@ -158,7 +222,7 @@
 
 		  body {
 			margin: 40px 10px;
-			padding: 0;
+			padding: 0px 0px;
 			font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 			font-size: 14px;
 			background-color: #555555;
@@ -171,9 +235,9 @@
           .fc table {
             font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 			font-size: 1.3em;
-			padding: 0 5px;
+			padding: 0px 5px;
           }
-          
+
           .fc-event-dot {
               display: none;
           }
@@ -198,19 +262,20 @@
 			max-width: 90%;
 			height: vh; //view height
 			margin: 10px auto;
-			padding: 0 10px;
+			padding: 0px 5px;
 			height: 100%;
 			//column-width: 400px;
 			overflow-y:visible;
 		  }
 
           #calendar  .table th, .table td {
-              padding: 0px 0px;
+            padding: 0px 0px;
           }
 
           #calendar .fc-view-container.after {
 			overflow-y:hidden;
 			overflow-x:hidden;
+			padding: 0px 0px;
           }
 		  
 		  .row {
@@ -221,6 +286,16 @@
 		      content: "";
 		      display: table;
 		      clear: both;
+		  }
+
+		  #next-sunday {
+			color: #ffffff;
+            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+			font-size: 1.5em;
+          }
+
+		  #next-sunday p {
+            margin-bottom: 2px;
 		  }
 
 		</style>
@@ -244,7 +319,7 @@
 
 
         <center>
-            <!--<h1>N&auml;sta vecka</h1>-->
+            <div id='next-sunday'></div>
             <div id='calendar'></div>
         </center>
 
