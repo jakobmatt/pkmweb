@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='sv'>
-    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0 -->
+    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0&idag=1 -->
 
 	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -16,6 +16,7 @@
         <script src='./examples/js/theme-chooser.js'></script>
 
 		<script>
+		var calendar;
 
         function getUrlVars() {
             var vars = {};
@@ -34,20 +35,36 @@
             return urlparameter;
         }
 
+        // Defining event listener function
+        function handleWindowSize(){
+            // Get width and height of the window excluding scrollbars
+            var w = document.documentElement.clientWidth;
+            var h = document.documentElement.clientHeight;
+            
+            // Display result inside a div element
+            //console.log("Width: " + w + ", " + "Height: " + h);
+            calendar.destroy();
+            calendar.render();
+        }
+         
+        // Attaching the event listener function to window's resize event
+        window.addEventListener("resize", handleWindowSize);
+    
 		document.addEventListener('DOMContentLoaded', function() {
             var initialLocaleCode = 'sv';
+            var dagar = parseInt(getUrlParam('dagar', '7'));
 			var calendarEl = document.getElementById('calendar');
-			var calendar;
             initThemeChooser({
         
                 init: function(themeSystem) {
         			calendar = new FullCalendar.Calendar(calendarEl, {
                         // an array of strings! [ 'dayGrid', 'timeGrid', 'list' ]
                         plugins: [ 'bootstrap', 'list', 'googleCalendar' ],
-        
+
                         themeSystem: 'bootstrap',
             			displayEventTime: true, // show the time column in list view
             			displayEventEnd: false, // don't display event end time
+            			//listDayAltFormat: 'D',
                         eventRender: function(info) {
                             //console.log(info.el.querySelector('.fc-list-item-title').innerHTML);
                             var titleObj = info.el.querySelector('.fc-title, .fc-list-item-title');
@@ -70,6 +87,7 @@
                             }
                             //console.log(titleObj.innerHTML);
                         },
+                        height: 'parent',
                         header: { 
                             left: '', 
                             center: 'title', 
@@ -91,7 +109,23 @@
             				arg.jsEvent.preventDefault() // don't navigate in main tab
             			},
                         defaultView: 'list',
-                        duration: { days: parseInt(getUrlParam('dagar', '8')) }, // default 8 days
+                        visibleRange: function(currentDate) {
+                            // Generate a new date for manipulating in the next step
+                            var startDate = new Date(currentDate.valueOf());
+                            var endDate = new Date(currentDate.valueOf());
+                        
+                            endDate.setDate(endDate.getDate() + dagar); //start from today
+                            if (parseInt(getUrlParam('idag', '0')) == 0)
+                            {
+                                // Adjust the start & end dates, respectively
+                                startDate.setDate(startDate.getDate() + 1); //start from tomorrow
+                                //start from tomorrow, add one extra day if today is shown
+                                endDate.setDate(endDate.getDate() + 1); 
+                            }
+
+                            return { start: startDate, end: endDate };
+                        },
+                        //duration: { days: dagar }, // default 8 days
                         buttonIcons: true, // show the prev/next text
                         locale: initialLocaleCode,
                         navLinks: false, // can click day/week names to navigate views
@@ -102,9 +136,8 @@
             			}
             		});
 
-                    //calendar.changeView('listWeek');
-                    //calendar.gotoDate( new Date() );
                     //calendar.setOption('themeSystem', 'darkly');
+                    //calendar.changeView('listWeek');
             		calendar.render();
                 },
             
@@ -112,10 +145,16 @@
                     calendar.setOption('themeSystem', themeSystem);
                 }
             });
+
 		});
 
 		</script>
 		<style>
+
+          html {
+			height: vh; //view height
+			width: vw; //view width
+          }
 
 		  body {
 			margin: 40px 10px;
@@ -123,20 +162,29 @@
 			font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 			font-size: 14px;
 			background-color: #555555;
-		  }
-		  
-		  h1 {
-		    color: #ffffff;
+			height: vh; //view height
+			width: vw; //view width
 		  }
 
           #top,
-          #calendar.fc-unthemed {
+          #calendar.fc-unthemed,
+          .fc table {
             font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+			font-size: 1.3em;
+			padding: 0 5px;
+          }
+          
+          .fc-event-dot {
+              display: none;
           }
 
           #top .selector {
             display: inline-block;
             margin-right: 10px;
+          }
+
+          #invisible {
+			display: none;
           }
 
 		  #loading {
@@ -147,15 +195,39 @@
 		  }
 
 		  #calendar {
-			max-width: 900px;
-			margin: 40px auto;
+			max-width: 90%;
+			height: vh; //view height
+			margin: 10px auto;
 			padding: 0 10px;
+			height: 100%;
+			//column-width: 400px;
+			overflow-y:visible;
 		  }
+
+          #calendar  .table th, .table td {
+              padding: 0px 0px;
+          }
+
+          #calendar .fc-view-container.after {
+			overflow-y:hidden;
+			overflow-x:hidden;
+          }
 		  
+		  .row {
+		      height: 100%;
+		  }
+
+		  .row:after {
+		      content: "";
+		      display: table;
+		      clear: both;
+		  }
+
 		</style>
 	</head>
 	<body>
-	    <div id='loading'>uppdaterar...
+	    <div id='loading'>uppdaterar...</div>
+	    <div id='invisible'>
             <div id='theme-system-selector' class='selector' style='display:none'>
                 <select>
                     <option value='bootstrap' selected>Bootstrap 4</option>
@@ -175,6 +247,7 @@
             <!--<h1>N&auml;sta vecka</h1>-->
             <div id='calendar'></div>
         </center>
+
 
 	</body>
 </html>
