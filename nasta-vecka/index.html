@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='sv'>
-    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0&idag=1&sondagforst=1 -->
+    <!-- Example: https://molndal.pingst.se/nasta-vecka/?dagar=10&plats=0&text=0&idag=1&sondagforst=1&kolumnbredd=100% -->
 
 	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -72,7 +72,7 @@
          
         // Attaching the event listener function to window's resize event
         window.addEventListener("resize", handleWindowSize);
-    
+
 		document.addEventListener('DOMContentLoaded', function() {
             var initialLocaleCode = 'sv';
             var dagar = parseInt(getUrlParam('dagar', '7'));
@@ -109,8 +109,12 @@
                                         titleObj.innerHTML += info.event.extendedProps.description; 
                                         //console.log(info.event.extendedProps.description);
                                     }
+
+                                    var maxWeekRange = new Date();
+                                    //check only the coming week for next sunday's primary service
+                                    maxWeekRange.setDate(maxWeekRange.getDate() + 7);
                                     // check if event is for next sunday primary service
-                                    if (0 == info.event.start.getDay())
+                                    if (0 == info.event.start.getDay() && info.event.start < maxWeekRange)
                                     {
                                         if (info.event.title.toLowerCase().includes("gudstjänst"))
                                         {
@@ -144,7 +148,7 @@
                                     }
                                     //console.log(next_sunday_primary_event);
                                 }
-                                if (parseInt(getUrlParam('sondagforst', '0')) == 1)
+                                if (parseInt(getUrlParam('sondagforst', '1')) == 1)
                                 {
                                     console.log("sondagforst: Ändrar text");
                             		handleNextSundayMessage(next_sunday_primary_event);
@@ -183,8 +187,6 @@
                             {
                                 // Adjust the start & end dates, respectively
                                 startDate.setDate(startDate.getDate() + 1); //start from tomorrow
-                                //start from tomorrow, add one extra day if today is shown
-                                endDate.setDate(endDate.getDate() + 1); 
                             }
 
                             return { start: startDate, end: endDate };
@@ -200,8 +202,8 @@
             			}
             		});
 
-                    //calendar.setOption('themeSystem', 'darkly');
                     //calendar.changeView('listWeek');
+                    calendarEl.style.columnWidth = getUrlParam('kolumnbredd', '500px');
             		calendar.render();
                 },
             
@@ -218,6 +220,7 @@
           html {
 			height: vh; //view height
 			width: vw; //view width
+			overflow-y:hidden;
           }
 
 		  body {
@@ -265,7 +268,7 @@
 			padding: 0px 5px;
 			height: 100%;
 			//column-width: 400px;
-			overflow-y:visible;
+			overflow-y:hidden;
 		  }
 
           #calendar  .table th, .table td {
@@ -319,6 +322,7 @@
 
 
         <center>
+            <!--<h1>N&auml;sta vecka</h1>-->
             <div id='next-sunday'></div>
             <div id='calendar'></div>
         </center>
